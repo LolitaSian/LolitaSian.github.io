@@ -197,9 +197,9 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/04/28/Alpha%E6%B7%B7%E5%90%88/">
+                      <a href="/2020/04/28/01%20%E5%92%B8%E9%B1%BC%E8%AE%B0%E5%BD%95%20360%E7%AC%94%E8%AF%95%E9%A2%98/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Alpha混合</span>
+                        <span class="hidden-mobile">咸鱼记录 360笔试</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -264,6 +264,29 @@
   </div>
 </div>
   
+
+  
+    <!-- APlayer 音乐播放器 -->
+    <div id="aplayer"></div>
+    <script defer src="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js" ></script>
+<link  rel="stylesheet" href="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css" />
+<script type="text/javascript">
+  var oldLoadAp = window.onload;
+  window.onload = function () {
+    oldLoadAp && oldLoadAp();
+
+    new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true,
+      autoplay: 'true' === 'true',
+      loop: 'all',
+      order: 'list',
+      theme: '#CDA398',
+      preload: 'none',
+      audio: [{"name":"Town of Windmill","artist":"a_hisa","url":"http://q9gcf8wjw.bkt.clouddn.com/a_hisa%20-%20Town%20of%20Windmill.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"},{"name":"月杜","artist":"CarrotWine","url":"http://q9gcf8wjw.bkt.clouddn.com/CarrotWine%20-%20%E6%9C%88%E6%9D%9C.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"},{"name":"A Place to Call Home","artist":"Evan Call","url":"http://q9gcf8wjw.bkt.clouddn.com/Evan%20Call%20-%20A%20Place%20to%20Call%20Home.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"},{"name":"The Voice in My Heart","artist":"Evan Call","url":"http://q9gcf8wjw.bkt.clouddn.com/Evan%20Call%20-%20The%20Voice%20in%20My%20Heart.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"}]
+    });
+  }
+</script>
 
   
 

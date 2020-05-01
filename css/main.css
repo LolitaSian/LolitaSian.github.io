@@ -65,6 +65,11 @@ img[srcset] {
   height: 100%;
   background-color: rgba(255,255,255,0.3) !important;
 }
+.view .mask #subtitle {
+  font-size: 5rem !important;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px #d1907b;
+}
 .flex-center {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -84,14 +89,9 @@ img[srcset] {
   -webkit-animation-name: fadeInUp;
   animation-name: fadeInUp;
 }
-@media (max-width: 767px) {
-  header .h2 {
-    font-size: 1.5rem;
-  }
-  .nopadding-md {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
+.nopadding-md {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 #local-search-result .search-list-title {
   border-left: 3px solid #0d47a1;
