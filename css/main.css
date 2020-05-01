@@ -65,8 +65,8 @@ img[srcset] {
   height: 100%;
   background-color: rgba(255,255,255,0.3) !important;
 }
-.view .mask #subtitle {
-  font-size: 2rem !important;
+.view .mask .h2 {
+  font-size: 2rem;
   font-weight: bold;
   text-shadow: 2px 2px 5px #d1907b;
 }
@@ -89,9 +89,16 @@ img[srcset] {
   -webkit-animation-name: fadeInUp;
   animation-name: fadeInUp;
 }
-.nopadding-md {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+@media (max-width: 767px) {
+  header .h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px #d1907b;
+  }
+  .nopadding-md {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 #local-search-result .search-list-title {
   border-left: 3px solid #0d47a1;
@@ -853,10 +860,14 @@ input[type=checkbox]:checked:after {
     -webkit-line-clamp: 2;
   }
 }
+.view .mask .h1 {
+  font-size: 3rem !important;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px #d1907b;
+}
 .post-content {
   box-sizing: border-box;
-  padding-left: 10%;
-  padding-right: 10%;
+  padding: 0 7%;
   max-width: 64rem;
 }
 @media (max-width: 767px) {
@@ -897,6 +908,12 @@ h6::before {
 }
 .post-content .markdown-body p {
   line-height: 160%;
+}
+.post-content .markdown-body pre {
+  background-color: #2b2b2b;
+}
+.post-content .markdown-body pre code {
+  font-size: 100%;
 }
 .post-prevnext {
   margin-top: 2rem;
