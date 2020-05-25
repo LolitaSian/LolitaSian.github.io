@@ -123,8 +123,8 @@
               
                 <div class="mt-3 post-meta">
                   <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2020-05-25 23:04">
-                    星期一, 五月 25日 2020, 11:04 晚上
+                  <time datetime="2020-05-25 23:27">
+                    星期一, 五月 25日 2020, 11:27 晚上
                   </time>
                 </div>
               
@@ -294,10 +294,11 @@
 </tbody>
 </table>
 <h4 id="实例"><a class="markdownIt-Anchor" href="#实例"></a> 实例</h4>
-<p>待排序序列<code>12,46,75,46,1,35,64</code> 共七个数，因此需要设置一个容量为8的数组。<br />
-<img src="https://img-blog.csdnimg.cn/20200101213120411.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+<p><img src="https://img-blog.csdnimg.cn/20200101213120411.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
 <img src="https://img-blog.csdnimg.cn/20200101213735924.jpg" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
-<h2 id="-1-"><a class="markdownIt-Anchor" href="#-1-"></a> <pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<p>待排序序列<code>12,46,75,46,1,35,64</code> 共七个数，因此需要设置一个容量为8的数组。</p>
+<pre><code class="hljs cpp">
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print1</span><span class="hljs-params">(<span class="hljs-keyword">int</span> r[],<span class="hljs-keyword">int</span> n)</span> <span class="hljs-comment">//过程输出 </span></span>
 <span class="hljs-function"></span>&#123;
@@ -335,7 +336,8 @@
 	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序后数组："</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
 	print2(r,<span class="hljs-number">8</span>);
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;</code></pre></h2>
+&#125;</code></pre>
+<hr />
 <h3 id="折半插入排序"><a class="markdownIt-Anchor" href="#折半插入排序"></a> 折半插入排序</h3>
 <p>这个就不多说了，就是把直接插入排序中在有序区进行顺序查找替换为二分查找。</p>
 <h4 id="代码-2"><a class="markdownIt-Anchor" href="#代码-2"></a> 代码</h4>
@@ -435,7 +437,7 @@
 </tr>
 </tbody>
 </table>
-<p>希尔排序的增量取法有各种方案。按照希尔提出的方法是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_1=\lfloor n/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo stretchy="false">⌊</mo><msub><mi>d</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_{i+1}=\lfloor d_i/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，最后增量为1。但由于直到最后一步，在奇数位置的元素才会与偶数位置的元素进行比较，这样使用这个序列的效率将很低。后人又提出各种效率更高的增量取法。<strong>不同增量取值方法会使希尔排序算法的性能有很大差异。</strong> 因此对希尔排序的时间复杂度的分析很困难，在特定情况下可以准确地估算排序码的比较次数和元素移动次数，但想要弄清排序码比较次数和元素移动次数与增量选择之间的依赖关系，并给出完整的数学分析，还没有人能够做到。在 Knuth所著的《计算机程序设计技巧》第3卷中，利用大量的实验统计资料得出，<strong>当n很大时，排序码平均比较次数和元素平均移动次数大约在<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>1.25</mn></msup></mrow><annotation encoding="application/x-tex">n^{1.25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">2</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1.6</mn><msup><mi>n</mi><mn>1.25</mn></msup></mrow><annotation encoding="application/x-tex">1.6n^{1.25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">2</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>的范围内。</strong> 我觉得就是现在大部分教材中的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>1.3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^{1.3})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。<br />
+<p>希尔排序的增量取法有各种方案。按照希尔提出的方法是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_1=\lfloor n/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo stretchy="false">⌊</mo><msub><mi>d</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_{i+1}=\lfloor d_i/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，最后增量为1。但由于直到最后一步，在奇数位置的元素才会与偶数位置的元素进行比较，这样使用这个序列的效率将很低。后人又提出各种效率更高的增量取法。**不同增量取值方法会使希尔排序算法的性能有很大差异。**因此对希尔排序的时间复杂度的分析很困难，在特定情况下可以准确地估算排序码的比较次数和元素移动次数，但想要弄清排序码比较次数和元素移动次数与增量选择之间的依赖关系，并给出完整的数学分析，还没有人能够做到。在 Knuth所著的《计算机程序设计技巧》第3卷中，利用大量的实验统计资料得出，<strong>当n很大时，排序码平均比较次数和元素平均移动次数大约在<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>1.25</mn></msup></mrow><annotation encoding="application/x-tex">n^{1.25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">2</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1.6</mn><msup><mi>n</mi><mn>1.25</mn></msup></mrow><annotation encoding="application/x-tex">1.6n^{1.25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">2</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>的范围内。</strong> 我觉得就是现在大部分教材中的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>1.3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^{1.3})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。<br />
 我还翻译了一个文章，感兴趣的可以看看，里面汇总了一些文献对于希尔排序的性能推算。<a href="https://blog.csdn.net/qq_36667170/article/details/103899517" target="_blank" rel="noopener">希尔排序复杂度详细分析（翻译来源：Hans Werner Lang教授）</a></p>
 <h4 id="实例-2"><a class="markdownIt-Anchor" href="#实例-2"></a> 实例</h4>
 <p>待排序序列<code>59,20,17,36,98,23,14,13,28</code> 共9个数，因此需要设置一个容量为10的数组。<br />
@@ -496,7 +498,7 @@
 <img src="https://img-blog.csdnimg.cn/20200102134933992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
 ……以此类推，直到整个序列排序完成。例子里可以看出来<font color=blue>每次交换都有一个数到达它的最终位置（之后排序这个数字的位置都不会变了嗷₍₍ (ง ˙ω˙)ว ⁾⁾）。</font></p>
 <h4 id="代码-4"><a class="markdownIt-Anchor" href="#代码-4"></a> 代码</h4>
-<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">BubbleSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">BubbleSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
 	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n<span class="hljs-number">-1</span>;i++)
 	&#123;  
@@ -546,7 +548,7 @@
 </table>
 <h4 id="实例-3"><a class="markdownIt-Anchor" href="#实例-3"></a> 实例</h4>
 <p>待排序序列<code>453,143,49,6,31,1,28</code></p>
-<h2 id="-6-"><a class="markdownIt-Anchor" href="#-6-"></a> <pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
@@ -587,7 +589,8 @@
 	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序结果:"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
 	Print(b,<span class="hljs-number">7</span>);
 	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;</code></pre></h2>
+&#125;</code></pre>
+<hr />
 <h3 id="快速排序quick-sort"><a class="markdownIt-Anchor" href="#快速排序quick-sort"></a> 快速排序（quick sort）</h3>
 <h4 id="排序过程-3"><a class="markdownIt-Anchor" href="#排序过程-3"></a> 排序过程</h4>
 <p>快速排序是对起泡排序的一种改进，<font color=red><strong>基本思想</strong></font>是首先选一个轴值（pivot即比较的基准）将待排序记录划分成独立的两部分，左侧记录的关键码均小于或等于轴值，右侧记录的关键码均大于或等于轴值，然后分别对这两部分重复上述过程，直到整个序列有序。<br />
@@ -685,7 +688,7 @@
 <h4 id="实例-4"><a class="markdownIt-Anchor" href="#实例-4"></a> 实例</h4>
 <p><img src="https://img-blog.csdnimg.cn/20200102143327193.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
 <pre><code class="hljs cpp"><span class="hljs-comment">/*---------------------写法一-----------------------*/</span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
@@ -746,7 +749,7 @@
 	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;</code></pre>
 <pre><code class="hljs cpp"><span class="hljs-comment">/*---------------------写法二-----------------------*/</span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
@@ -854,7 +857,7 @@
 </table>
 <h4 id="实例-5"><a class="markdownIt-Anchor" href="#实例-5"></a> 实例</h4>
 <p><img src="https://img-blog.csdnimg.cn/202001031005112.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
-<h2 id="-12-"><a class="markdownIt-Anchor" href="#-12-"></a> <pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
@@ -892,7 +895,8 @@
 	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序后数组："</span>;
 	print(a,<span class="hljs-number">9</span>);
 	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;</code></pre></h2>
+&#125;</code></pre>
+<hr />
 <h3 id="堆排序heap-sort"><a class="markdownIt-Anchor" href="#堆排序heap-sort"></a> 堆排序（heap sort）</h3>
 <p>堆排序是简单选择排序的改进，是利用堆的特性进行排序的方法。<font color=red><strong>基本思想</strong></font>是（假设用大根堆）首先将待排序的记录序列构造成一个堆，选出堆中所有记录的最大者即堆顶的记录，然后将堆顶记录移走，并将剩余记录再调整成堆，这样又能找出一个当前最大的记录，以此类推，直到堆中只有一个记录为止。</p>
 <blockquote>
@@ -1016,7 +1020,7 @@ k_i \leq k_{2i+1}
 <h4 id="实例-6"><a class="markdownIt-Anchor" href="#实例-6"></a> 实例</h4>
 <p><img src="https://img-blog.csdnimg.cn/20200103130942564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
 <font size=4><strong>写法一</strong></font></p>
-<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
@@ -1076,7 +1080,7 @@ k_i \leq k_{2i+1}
 	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;</code></pre>
 <p><font size=4><strong>写法二</strong></font></p>
-<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
 <span class="hljs-function"></span>&#123;
@@ -1123,6 +1127,7 @@ k_i \leq k_{2i+1}
 	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
 	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 &#125;</code></pre>
+<hr />
 <h1 id="各种排序的比较"><a class="markdownIt-Anchor" href="#各种排序的比较"></a> 各种排序的比较</h1>
 <table>
 <thead>
@@ -1229,8 +1234,8 @@ k_i \leq k_{2i+1}
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/05/24/2%20%E5%8A%A8%E6%BC%AB%E8%AE%B0%E5%BD%95/">
-                        <span class="hidden-mobile">我的动漫记录</span>
+                      <a href="/2020/05/24/3%20%E6%A6%82%E7%8E%87%E8%AE%BA%E4%B8%8E%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1%E6%80%BB%E7%BB%93/">
+                        <span class="hidden-mobile">概率论与数理统计总结</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
