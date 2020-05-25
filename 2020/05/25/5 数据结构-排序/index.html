@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#EFCAC3">
+  <meta name="description" content="">
+  <meta name="author" content="Ann">
+  <meta name="keywords" content="">
+  <title>排序算法总结 - Ann&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/agate.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_ijqayz9ro8k.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 50vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Ann's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('http://q9gcf8wjw.bkt.clouddn.com/default-background.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-05-25 23:04">
+                    星期一, 五月 25日 2020, 11:04 晚上
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    7.2k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    101
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="排序的一些基本概念"><a class="markdownIt-Anchor" href="#排序的一些基本概念"></a> 排序的一些基本概念</h1>
+<p><strong>排序是数据处理中经常使用的一种操作，其主要目的是便于查找。</strong></p>
+<ol>
+<li>在排序（sort）问题中，通常将数据元素称为<strong>记录（record）</strong>。</li>
+<li>将待排序记录扫描一遍称为一<strong>趟（pass）</strong>。</li>
+<li><strong>排序的定义</strong><br />
+给定一个记录序列（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mn>1</mn></msub><mi mathvariant="normal">、</mi><msub><mi>r</mi><mn>2</mn></msub><mi mathvariant="normal">、</mi><mo>…</mo><mi mathvariant="normal">、</mi><msub><mi>r</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">r_1、r_2、…、r_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>）其关键码分别为（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>k</mi><mn>1</mn></msub><mi mathvariant="normal">、</mi><msub><mi>k</mi><mn>2</mn></msub><mi mathvariant="normal">、</mi><mo>…</mo><mi mathvariant="normal">、</mi><msub><mi>k</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">k_1、k_2、…、k_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>），排序是将这些记录排列成顺序为（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mrow><mi>s</mi><mn>1</mn></mrow></msub><mi mathvariant="normal">、</mi><msub><mi>r</mi><mrow><mi>s</mi><mn>2</mn></mrow></msub><mi mathvariant="normal">、</mi><mo>…</mo><mi mathvariant="normal">、</mi><msub><mi>r</mi><mrow><mi>s</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">r_{s1}、r_{s2}、…、r_{sn}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>）的一个序列，使得相应的关键码满足升序或降序。<strong>简言之：排序是将一个记录的任意序列重新排列成一个按关键码有序的序列。</strong></li>
+<li><strong>算法的稳定性</strong><br />
+假设在待排序的记录序列中有多个具有相同关键码的记录，若经过排序，这些记录的相对此项保持不变，及在原序列中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>=</mo><msub><mi>k</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">k_i=k_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>，且<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">k_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>在<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>k</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">k_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>之前，而排序后的序列中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">k_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>仍在<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>k</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">k_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>之前，则称这种算法是稳定的；反之不稳定。</li>
+</ol>
+<h1 id="排序的分类"><a class="markdownIt-Anchor" href="#排序的分类"></a> 排序的分类</h1>
+<ul>
+<li>
+<p>根据<strong>排序过程中待排序的所有记录是否全部被放置在内存中</strong>，可分为内排序和外排序。</p>
+<ul>
+<li>内排序：排序过程中，待排序的所有记录全部被放置在内存中。</li>
+<li>排序：排序过程中，由于待排序记录个数太多，不能同时放置在内存中，整个排序过程需要在内外存之间多次交换数据才能得到排序结果。</li>
+</ul>
+</li>
+<li>
+<p>根据<strong>排序方法是否建立在关键码比较的基础上</strong>，可分为基于比较的排序和不基于比较的排序。</p>
+</li>
+</ul>
+<h1 id="排序算法的性能"><a class="markdownIt-Anchor" href="#排序算法的性能"></a> 排序算法的性能</h1>
+<ol>
+<li><strong>排序算法的时间开销是衡量其好坏的<font color =blue>最重要</font>的标志</strong>。<br />
+对于基于比较的内排序，在排序过程中通常需要进行下列两种基本操作<br />
+①比较，关键码之间的比较；<br />
+②移动，记录从一个位置移动到另一个位置。<br />
+所以，在待排序的记录个数一定的条件下，算法的执行时间主要消耗在关键码之间的比较和记录的移动上。因此，高效率的排序算法应该具有尽可能少的关键码比较次数和尽可能少的记录移动次数。</li>
+<li><strong>评价排序算法的另一个主要标准是执行算法所需要的辅助存储空间。</strong> 辅助存储空间是指在待排序的记录个数一定的条件下，除了存放待排序记录占用的存储空间之外，执行算法所需要的其他存储空间。</li>
+<li><strong>算法本身的复杂程度也是一个要考虑的因素。</strong></li>
+<li><font color=green>稳定性不是衡量算法好坏的标准。</font></li>
+</ol>
+<h1 id="排序算法思想及代码"><a class="markdownIt-Anchor" href="#排序算法思想及代码"></a> 排序算法思想及代码</h1>
+<h2 id="插入排序"><a class="markdownIt-Anchor" href="#插入排序"></a> 插入排序</h2>
+<p><strong>主要思想是</strong>每次讲一个待排序记录插入到一个已经排好序的序列中，直到全部记录都排好序。</p>
+<h3 id="直接插入排序straight-insertion-sort"><a class="markdownIt-Anchor" href="#直接插入排序straight-insertion-sort"></a> 直接插入排序（straight insertion sort）</h3>
+<p>直接插入排序算法简单、容易实现，当序列中的记录基本有序或待排序记录较少时，是最佳的排序方法。<font color=red><strong>基本思想</strong></font>是依次将待排序序列中的每一个记录插入到一个已排好序的序列中，直到全部记录都排好序。可以想一下打扑克的时候，每抓到一张牌就会插入到你手中已经按顺序理好的牌中。<br />
+<img src="https://img-blog.csdnimg.cn/20200102124350872.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+<ol>
+<li>将整个待排序的记录划分为有序区和无序区，初始时有序区为待排序记录序列中的第一个记录，无序区包括所有的剩余待排序记录</li>
+<li>讲无序区第一个记录插入到有序区的合适位置中，从而使无序区减少一个记录，有序区增加一个记录</li>
+<li>重复2直到无序区中没有记录为止。</li>
+</ol>
+<p>例如待排序序列序列<code>12 15 9 20 6 31 24</code></p>
+<table>
+<thead>
+<tr>
+<th>初试键值序列</th>
+<th>[ 12 ] 15 9 20 6 31 24</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一趟</td>
+<td>[ 12 15 ] 9 20 6 31 24</td>
+</tr>
+<tr>
+<td>第二趟</td>
+<td>[ 9 12 15 ] 20 6 31 24</td>
+</tr>
+<tr>
+<td>第三趟</td>
+<td>[ 9 12 15 20 ] 6 31 24</td>
+</tr>
+<tr>
+<td>第四趟</td>
+<td>[ 6 9 12 15 20 ] 31 24</td>
+</tr>
+<tr>
+<td>第五趟</td>
+<td>[ 6 9 12 15 20 31 ] 24</td>
+</tr>
+<tr>
+<td>第六趟</td>
+<td>[ 6 9 12 15 20 24 31 ]</td>
+</tr>
+</tbody>
+</table>
+<h4 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h4>
+<p><code>a[n]</code>为待排序数组，其中有n个空间，但是<strong>注意</strong>此时是将数组<code>a[n]</code>的第一个位置，即<code>a[0]</code>作为哨兵，暂存你从无序区选到的数。因此你实际排序的数只有n-1个。</p>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">InsertSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> r[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i,j;
+	<span class="hljs-keyword">for</span>(i=<span class="hljs-number">2</span>;i&lt;n;i++)				<span class="hljs-comment">//0号单元作为哨兵</span>
+	&#123;
+		r[<span class="hljs-number">0</span>]=r[i];					<span class="hljs-comment">//暂存关键码</span>
+		<span class="hljs-keyword">for</span>(j=i<span class="hljs-number">-1</span>;r[<span class="hljs-number">0</span>]&lt;=r[j];j--)	<span class="hljs-comment">//r[0]&lt;r[j]也可</span>
+			r[j+<span class="hljs-number">1</span>]=r[j];
+		r[j+<span class="hljs-number">1</span>]=r[<span class="hljs-number">0</span>];
+	&#125;
+&#125;</code></pre>
+<h4 id="算法分析"><a class="markdownIt-Anchor" href="#算法分析"></a> 算法分析</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最好情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>平均</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1 )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例"><a class="markdownIt-Anchor" href="#实例"></a> 实例</h4>
+<p>待排序序列<code>12,46,75,46,1,35,64</code> 共七个数，因此需要设置一个容量为8的数组。<br />
+<img src="https://img-blog.csdnimg.cn/20200101213120411.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+<img src="https://img-blog.csdnimg.cn/20200101213735924.jpg" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+<h2 id="-1-"><a class="markdownIt-Anchor" href="#-1-"></a> <pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print1</span><span class="hljs-params">(<span class="hljs-keyword">int</span> r[],<span class="hljs-keyword">int</span> n)</span> <span class="hljs-comment">//过程输出 </span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"r["</span>&lt;&lt;<span class="hljs-number">0</span>&lt;&lt;<span class="hljs-string">"] = "</span>&lt;&lt;r[<span class="hljs-number">0</span>]&lt;&lt;<span class="hljs-string">" 哨兵"</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;n;i++)
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"r["</span>&lt;&lt;i&lt;&lt;<span class="hljs-string">"] = "</span>&lt;&lt;r[i]&lt;&lt;<span class="hljs-built_in">endl</span>; 
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print2</span><span class="hljs-params">(<span class="hljs-keyword">int</span> r[],<span class="hljs-keyword">int</span> n)</span> <span class="hljs-comment">//常规输出 </span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;n;i++)
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"r["</span>&lt;&lt;i&lt;&lt;<span class="hljs-string">"] = "</span>&lt;&lt;r[i]&lt;&lt;<span class="hljs-built_in">endl</span>; 
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">InsertSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> r[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i,j;
+	<span class="hljs-keyword">for</span>(i=<span class="hljs-number">2</span>;i&lt;n;i++)				<span class="hljs-comment">//0号单元作为哨兵</span>
+	&#123;
+		r[<span class="hljs-number">0</span>]=r[i];					<span class="hljs-comment">//暂存关键码</span>
+		<span class="hljs-keyword">for</span>(j=i<span class="hljs-number">-1</span>;r[<span class="hljs-number">0</span>]&lt;=r[j];j--)
+			r[j+<span class="hljs-number">1</span>]=r[j];
+		r[j+<span class="hljs-number">1</span>]=r[<span class="hljs-number">0</span>];
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"第"</span>&lt;&lt;i<span class="hljs-number">-1</span>&lt;&lt;<span class="hljs-string">"趟结果"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+		print1(r,<span class="hljs-number">8</span>);
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	&#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> r[<span class="hljs-number">8</span>]=&#123;<span class="hljs-number">0</span>,<span class="hljs-number">12</span>,<span class="hljs-number">46</span>,<span class="hljs-number">75</span>,<span class="hljs-number">46</span>,<span class="hljs-number">1</span>,<span class="hljs-number">35</span>,<span class="hljs-number">64</span>&#125;;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序数组："</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
+	print2(r,<span class="hljs-number">8</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	InsertSort(r,<span class="hljs-number">8</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序后数组："</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
+	print2(r,<span class="hljs-number">8</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></h2>
+<h3 id="折半插入排序"><a class="markdownIt-Anchor" href="#折半插入排序"></a> 折半插入排序</h3>
+<p>这个就不多说了，就是把直接插入排序中在有序区进行顺序查找替换为二分查找。</p>
+<h4 id="代码-2"><a class="markdownIt-Anchor" href="#代码-2"></a> 代码</h4>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">BInsertSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i,j,low,high,mid;
+	<span class="hljs-keyword">for</span> (i=<span class="hljs-number">2</span>;i&lt;n;i++)
+	&#123;
+		a[<span class="hljs-number">0</span>]=a[i];
+		low=<span class="hljs-number">1</span>;
+		high=i<span class="hljs-number">-1</span>;
+		<span class="hljs-keyword">while</span>(low&lt;=high)
+		&#123;
+			mid=(low+high)/<span class="hljs-number">2</span>;
+			<span class="hljs-keyword">if</span> (a[mid]&gt;a[<span class="hljs-number">0</span>])
+				high=mid<span class="hljs-number">-1</span>;
+			<span class="hljs-keyword">else</span>
+				low=mid+<span class="hljs-number">1</span>;
+		&#125;
+		<span class="hljs-keyword">for</span>(j=i<span class="hljs-number">-1</span>;j&gt;=high+<span class="hljs-number">1</span>;j--)
+			a[j+<span class="hljs-number">1</span>]=a[j];
+		a[high+<span class="hljs-number">1</span>]=a[<span class="hljs-number">0</span>]; <span class="hljs-comment">//a[low]=a[0];</span>
+	&#125;
+&#125;</code></pre>
+<hr />
+<h3 id="希尔排序shell-sort"><a class="markdownIt-Anchor" href="#希尔排序shell-sort"></a> 希尔排序（shell sort）</h3>
+<p>希尔排序又称缩小增量排序，是对直接插入排序的一种改进。<font color=red><strong>基本思想</strong></font>是将待排序序列分成若干子序列，在子序列内进行插入排序，待整个序列基本有序时，对全体记录进行一次插入排序。</p>
+<h4 id="排序过程"><a class="markdownIt-Anchor" href="#排序过程"></a> 排序过程</h4>
+<p>假设待排序的记录为n个，先取整数<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi mathvariant="normal">＜</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">d＜n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span><span class="mord cjk_fallback">＜</span><span class="mord mathdefault">n</span></span></span></span>，将所有相距为d的记录构成一组，从而将整个待排序记录序列分割成为d个子序列，对每个子序列分别进行直接插入排序，然后再缩小间隔d。重复上述分割，再对每个子序列分别进行直接插入排序，直到最后取d＝1，即将所有记录放在一组进行一次直接插入排序，最终将所有记录重新排列成按关键码有序的序列。d的取值可以自己决定，一般来说，<strong>按照希尔最早提出的方法</strong>是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_1=\lfloor n/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo stretchy="false">⌊</mo><msub><mi>d</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_{i+1}=\lfloor d_i/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，最后增量为1。<br />
+例如：待排序徐序列<code>59,20,17,36,98,23,14,13,28</code></p>
+<table>
+<thead>
+<tr>
+<th>shell sort</th>
+<th>d</th>
+<th>序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一趟</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>9</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">9/2=4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">9</span><span class="mord">/</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span></td>
+<td>28　　　　59　　　　98<br>20　　　　23　　<br>　14　　　　17　<br>　　　13　　　　36<br>结果：28 20 14 13 59 23 17 36 98</td>
+</tr>
+<tr>
+<td>第二趟</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">4/2=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mord">/</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span></td>
+<td>14　17　28　59　98<br>　19　20　23　36　<br>结果：14 19 17 20 28 23 59 36 98</td>
+</tr>
+<tr>
+<td>第三趟</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2/2=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mord">/</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></td>
+<td>（即直接插入排序）<br>结果：14 17 19 20 23 28 36 59 98</td>
+</tr>
+</tbody>
+</table>
+<h4 id="代码-3"><a class="markdownIt-Anchor" href="#代码-3"></a> 代码</h4>
+<p>希尔排序中<code>a[n]</code>为待排序数组，其中有n个空间，<strong>注意</strong>此时是将数组<code>a[n]</code>的第一个位置，即<code>a[0]</code>作为暂存单元，不是哨兵。因此你实际排序的数只有n-1个。</p>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ShellSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> d,i,j;
+	<span class="hljs-keyword">for</span>(d=n/<span class="hljs-number">2</span>;d&gt;=<span class="hljs-number">1</span>;d/=<span class="hljs-number">2</span>)
+	&#123;
+		<span class="hljs-keyword">for</span> (i=d+<span class="hljs-number">1</span>;i&lt;n;i++)
+		&#123;
+				a[<span class="hljs-number">0</span>]=a[i];
+				<span class="hljs-keyword">for</span> (j=i-d;j&gt;<span class="hljs-number">0</span>&amp;&amp;a[<span class="hljs-number">0</span>]&lt;a[j];j=j-d)
+					a[j+d]=a[j];
+				a[j+d]=a[<span class="hljs-number">0</span>];
+		&#125;
+	&#125;
+&#125;</code></pre>
+<h4 id="算法分析-2"><a class="markdownIt-Anchor" href="#算法分析-2"></a> 算法分析</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最好情况</td>
+<td>/</td>
+<td></td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>平均</td>
+<td>/</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1 )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<p>希尔排序的增量取法有各种方案。按照希尔提出的方法是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_1=\lfloor n/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mo stretchy="false">⌊</mo><msub><mi>d</mi><mi>i</mi></msub><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">d_{i+1}=\lfloor d_i/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，最后增量为1。但由于直到最后一步，在奇数位置的元素才会与偶数位置的元素进行比较，这样使用这个序列的效率将很低。后人又提出各种效率更高的增量取法。<strong>不同增量取值方法会使希尔排序算法的性能有很大差异。</strong> 因此对希尔排序的时间复杂度的分析很困难，在特定情况下可以准确地估算排序码的比较次数和元素移动次数，但想要弄清排序码比较次数和元素移动次数与增量选择之间的依赖关系，并给出完整的数学分析，还没有人能够做到。在 Knuth所著的《计算机程序设计技巧》第3卷中，利用大量的实验统计资料得出，<strong>当n很大时，排序码平均比较次数和元素平均移动次数大约在<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>1.25</mn></msup></mrow><annotation encoding="application/x-tex">n^{1.25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">2</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1.6</mn><msup><mi>n</mi><mn>1.25</mn></msup></mrow><annotation encoding="application/x-tex">1.6n^{1.25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">2</span><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span></span>的范围内。</strong> 我觉得就是现在大部分教材中的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>1.3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^{1.3})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。<br />
+我还翻译了一个文章，感兴趣的可以看看，里面汇总了一些文献对于希尔排序的性能推算。<a href="https://blog.csdn.net/qq_36667170/article/details/103899517" target="_blank" rel="noopener">希尔排序复杂度详细分析（翻译来源：Hans Werner Lang教授）</a></p>
+<h4 id="实例-2"><a class="markdownIt-Anchor" href="#实例-2"></a> 实例</h4>
+<p>待排序序列<code>59,20,17,36,98,23,14,13,28</code> 共9个数，因此需要设置一个容量为10的数组。<br />
+<img src="https://img-blog.csdnimg.cn/20200102130939464.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> r[],<span class="hljs-keyword">int</span> n)</span> <span class="hljs-comment">//常规输出 </span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;n;i++)
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"r["</span>&lt;&lt;i&lt;&lt;<span class="hljs-string">"] = "</span>&lt;&lt;r[i]&lt;&lt;<span class="hljs-built_in">endl</span>; 
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ShellSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> d,i,j;
+	<span class="hljs-keyword">int</span> count=<span class="hljs-number">1</span>; <span class="hljs-comment">//用于过程输出，可删除 </span>
+	<span class="hljs-keyword">for</span>(d=n/<span class="hljs-number">2</span>;d&gt;=<span class="hljs-number">1</span>;d/=<span class="hljs-number">2</span>)
+	&#123;
+		<span class="hljs-keyword">for</span> (i=d+<span class="hljs-number">1</span>;i&lt;n;i++)
+		&#123;
+				a[<span class="hljs-number">0</span>]=a[i];
+				<span class="hljs-keyword">for</span> (j=i-d;j&gt;<span class="hljs-number">0</span>&amp;&amp;a[<span class="hljs-number">0</span>]&lt;a[j];j=j-d)
+					a[j+d]=a[j];
+				a[j+d]=a[<span class="hljs-number">0</span>];
+		&#125;
+		<span class="hljs-comment">/*-----过程输出可删除--------*/</span> 
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"第"</span>&lt;&lt;count&lt;&lt;<span class="hljs-string">"趟"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"d = "</span>&lt;&lt;d&lt;&lt;<span class="hljs-built_in">endl</span>;
+		count++;
+		print(a,n);
+		<span class="hljs-comment">/*-----过程输出--------*/</span> 
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+
+	<span class="hljs-keyword">int</span> a[<span class="hljs-number">10</span>]=&#123;<span class="hljs-number">0</span>,<span class="hljs-number">59</span>,<span class="hljs-number">20</span>,<span class="hljs-number">17</span>,<span class="hljs-number">36</span>,<span class="hljs-number">98</span>,<span class="hljs-number">23</span>,<span class="hljs-number">14</span>,<span class="hljs-number">13</span>,<span class="hljs-number">28</span>&#125;;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序数组"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	print(a,<span class="hljs-number">10</span>);
+	ShellSort(a,<span class="hljs-number">10</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序结果"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	print(a,<span class="hljs-number">10</span>);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+<h2 id="交换排序"><a class="markdownIt-Anchor" href="#交换排序"></a> 交换排序</h2>
+<h3 id="冒泡排序bubble-sort"><a class="markdownIt-Anchor" href="#冒泡排序bubble-sort"></a> 冒泡排序（bubble sort）</h3>
+<p>冒泡排序又称起泡排序，<font color=red><strong>基本思想</strong></font>是两两比较相邻记录的关键码，如果反序则交换。</p>
+<h4 id="排序过程-2"><a class="markdownIt-Anchor" href="#排序过程-2"></a> 排序过程</h4>
+<ol>
+<li>将整个待排序的记录序列划分成有序区和无序区，初始时有序区为空，无序区包括所有待排序的记录。</li>
+<li>对无序区从前向后依次将相邻记录的关键码进行比较，若反序则交换，从而使得<br />
+关键码小的记录向前移，关键码大的记录向后移（像水中的气泡，体积大的先浮上来）</li>
+<li>重复执行2直到无序区中没有反序的记录。</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200102132754483.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+<p><strong>例如：</strong> 待排序序列<code>453,143,49,6,31,1,28</code><br />
+<img src="https://img-blog.csdnimg.cn/20200102134933992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+……以此类推，直到整个序列排序完成。例子里可以看出来<font color=blue>每次交换都有一个数到达它的最终位置（之后排序这个数字的位置都不会变了嗷₍₍ (ง ˙ω˙)ว ⁾⁾）。</font></p>
+<h4 id="代码-4"><a class="markdownIt-Anchor" href="#代码-4"></a> 代码</h4>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">BubbleSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n<span class="hljs-number">-1</span>;i++)
+	&#123;  
+		<span class="hljs-comment">/*设置一个标志，如果依次循环中不再出现交换，</span>
+<span class="hljs-comment">		证明每个记录都到达了它的最终位置上，</span>
+<span class="hljs-comment">		即可跳出循环停止排序过程。*/</span>
+		<span class="hljs-keyword">bool</span> flag=<span class="hljs-literal">false</span>;  
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;n-i<span class="hljs-number">-1</span>;j++)
+		&#123;
+			<span class="hljs-keyword">if</span> (a[j]&gt;a[j+<span class="hljs-number">1</span>])
+			&#123;
+				<span class="hljs-keyword">int</span> mid=a[j];
+				a[j]=a[j+<span class="hljs-number">1</span>];
+				a[j+<span class="hljs-number">1</span>]=mid;
+				flag=<span class="hljs-literal">true</span>;
+			&#125;
+		&#125;
+		<span class="hljs-keyword">if</span>(flag==<span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span>;
+	&#125;
+&#125;</code></pre>
+<h4 id="算法分析-3"><a class="markdownIt-Anchor" href="#算法分析-3"></a> 算法分析</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最好情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>平均</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1 )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-3"><a class="markdownIt-Anchor" href="#实例-3"></a> 实例</h4>
+<p>待排序序列<code>453,143,49,6,31,1,28</code></p>
+<h2 id="-6-"><a class="markdownIt-Anchor" href="#-6-"></a> <pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)
+	&#123;
+		<span class="hljs-built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="hljs-string">" "</span>;
+	&#125;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">BubbleSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n<span class="hljs-number">-1</span>;i++)
+	&#123;
+		<span class="hljs-keyword">bool</span> flag=<span class="hljs-literal">false</span>;
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;n-i<span class="hljs-number">-1</span>;j++)
+		&#123;
+			<span class="hljs-keyword">if</span> (a[j]&gt;a[j+<span class="hljs-number">1</span>])
+			&#123;
+				<span class="hljs-keyword">int</span> mid=a[j];
+				a[j]=a[j+<span class="hljs-number">1</span>];
+				a[j+<span class="hljs-number">1</span>]=mid;
+				flag=<span class="hljs-literal">true</span>;
+			&#125;
+		&#125;
+		<span class="hljs-keyword">if</span>(flag==<span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span>;
+		<span class="hljs-comment">/*-------排序过程------*/</span>
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"第"</span>&lt;&lt;i+<span class="hljs-number">1</span>&lt;&lt;<span class="hljs-string">"趟排序："</span>; 
+		Print(a,n); 
+		<span class="hljs-comment">/*-------排序过程------*/</span>
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> b[<span class="hljs-number">7</span>]=&#123;<span class="hljs-number">453</span>,<span class="hljs-number">143</span>,<span class="hljs-number">49</span>,<span class="hljs-number">6</span>,<span class="hljs-number">31</span>,<span class="hljs-number">1</span>,<span class="hljs-number">28</span>&#125;;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序数组:"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	Print(b,<span class="hljs-number">7</span>);
+	BubbleSort(b,<span class="hljs-number">7</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序结果:"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	Print(b,<span class="hljs-number">7</span>);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></h2>
+<h3 id="快速排序quick-sort"><a class="markdownIt-Anchor" href="#快速排序quick-sort"></a> 快速排序（quick sort）</h3>
+<h4 id="排序过程-3"><a class="markdownIt-Anchor" href="#排序过程-3"></a> 排序过程</h4>
+<p>快速排序是对起泡排序的一种改进，<font color=red><strong>基本思想</strong></font>是首先选一个轴值（pivot即比较的基准）将待排序记录划分成独立的两部分，左侧记录的关键码均小于或等于轴值，右侧记录的关键码均大于或等于轴值，然后分别对这两部分重复上述过程，直到整个序列有序。<br />
+<img src="https://img-blog.csdnimg.cn/20200102144417290.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+<strong>举个栗子：</strong> 待排序序列：<code>23,12,49,6,31,19,28</code><br />
+<img src="https://img-blog.csdnimg.cn/20200102152434953.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+以第一行数据为例：<br />
+<img src="https://img-blog.csdnimg.cn/20200313021246418.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+例子中可以看出，<font color=green>每次交换轴值都会到达它的最终位置（之后排序这个数字的位置都不会变了嗷₍₍ (ง ˙ω˙)ว ⁾⁾）。</font></p>
+<h4 id="代码-5"><a class="markdownIt-Anchor" href="#代码-5"></a> 代码</h4>
+<p>我参考了两本书，列了两个写法。两个写法的区别就在于<code>int partition(int a[],int low,int high)</code>这个函数不太一样。<br />
+<font size=4><strong>写法一</strong></font><br />
+不借助pivot做暂存空间。每次比较发现逆序之后直接进行交换。</p>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">change</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;a, <span class="hljs-keyword">int</span> &amp;b)</span>					<span class="hljs-comment">//自定义的交换函数</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> mid=a;
+	a=b;
+	b=mid;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">while</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[low]&lt;=a[high])
+			high--;
+		change(a[low],a[high]);
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[low]&lt;=a[high])
+			low++;
+		change(a[low],a[high]);
+	&#125;
+	<span class="hljs-keyword">return</span> low; 							<span class="hljs-comment">//return high也行 </span>
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">QuickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">if</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">int</span> p=partition(a,low,high);
+		QuickSort(a,low,p<span class="hljs-number">-1</span>);
+		QuickSort(a,p+<span class="hljs-number">1</span>,high);
+	&#125;
+&#125;</code></pre>
+<p><font size=4><strong>写法二</strong></font><br />
+借助pivot做暂存空间。最后再将轴值放入。</p>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> pivot = a[low];
+	<span class="hljs-keyword">while</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[high]&gt;=pivot)
+			high--;
+		a[low]=a[high];
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[low]&lt;=pivot)
+			low++;
+		a[high]=a[low];
+	&#125;
+	a[low]=pivot;
+	<span class="hljs-keyword">return</span> low; 						<span class="hljs-comment">//return high也行 </span>
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">QuickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">if</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">int</span> p=partition(a,low,high);	<span class="hljs-comment">//第一次划分</span>
+		QuickSort(a,low,p<span class="hljs-number">-1</span>);  			<span class="hljs-comment">//递归对左侧划分</span>
+		QuickSort(a,p+<span class="hljs-number">1</span>,high);			<span class="hljs-comment">//递归对左侧划分</span>
+	&#125;
+&#125;</code></pre>
+<h4 id="算法分析-4"><a class="markdownIt-Anchor" href="#算法分析-4"></a> 算法分析</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最好情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(log_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+<tr>
+<td>平均</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(log_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-4"><a class="markdownIt-Anchor" href="#实例-4"></a> 实例</h4>
+<p><img src="https://img-blog.csdnimg.cn/20200102143327193.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+<pre><code class="hljs cpp"><span class="hljs-comment">/*---------------------写法一-----------------------*/</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)
+	&#123;
+		<span class="hljs-built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="hljs-string">" "</span>;
+	&#125;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">change</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;a, <span class="hljs-keyword">int</span> &amp;b)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> mid=a;
+	a=b;
+	b=mid;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">while</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[low]&lt;=a[high])
+			high--;
+		<span class="hljs-comment">//if(low&lt;high)</span>
+		&#123;
+			change(a[low],a[high]);
+		<span class="hljs-comment">//	low++;</span>
+		&#125;
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[low]&lt;=a[high])
+			low++;
+		<span class="hljs-comment">//if(low&lt;high)</span>
+		&#123;
+			change(a[low],a[high]);
+		<span class="hljs-comment">//	high--;</span>
+		&#125;
+	&#125;
+	Print(a,<span class="hljs-number">7</span>);  <span class="hljs-comment">//过程输出 </span>
+	<span class="hljs-keyword">return</span> low; <span class="hljs-comment">//return high也行 </span>
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">QuickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">if</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">int</span> p=partition(a,low,high);
+		QuickSort(a,low,p<span class="hljs-number">-1</span>);
+		QuickSort(a,p+<span class="hljs-number">1</span>,high);
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> a[<span class="hljs-number">7</span>]=&#123;<span class="hljs-number">23</span>,<span class="hljs-number">12</span>,<span class="hljs-number">49</span>,<span class="hljs-number">6</span>,<span class="hljs-number">31</span>,<span class="hljs-number">19</span>,<span class="hljs-number">28</span>&#125;;
+	
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序序列："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	Print(a,<span class="hljs-number">7</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>&lt;&lt;<span class="hljs-string">"划分过程"</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
+	QuickSort(a,<span class="hljs-number">0</span>,<span class="hljs-number">6</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>&lt;&lt;<span class="hljs-string">"排序结果："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	Print(a,<span class="hljs-number">7</span>);
+
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+<pre><code class="hljs cpp"><span class="hljs-comment">/*---------------------写法二-----------------------*/</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)
+	&#123;
+		<span class="hljs-built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="hljs-string">" "</span>;
+	&#125;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> pivot = a[low];
+	<span class="hljs-keyword">while</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[high]&gt;=pivot)
+			high--;
+		a[low]=a[high];
+		<span class="hljs-keyword">while</span>(low&lt;high &amp;&amp; a[low]&lt;=pivot)
+			low++;
+		a[high]=a[low];
+	&#125;
+	a[low]=pivot;
+	Print(a,<span class="hljs-number">7</span>); <span class="hljs-comment">//过程输出 </span>
+	<span class="hljs-keyword">return</span> low; <span class="hljs-comment">//return high也行，可以自己试一下，因为这时候low=high为pivot的最终位置</span>
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">QuickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">if</span>(low&lt;high)
+	&#123;
+		<span class="hljs-keyword">int</span> p=partition(a,low,high);
+		QuickSort(a,low,p<span class="hljs-number">-1</span>);
+		QuickSort(a,p+<span class="hljs-number">1</span>,high);
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> a[<span class="hljs-number">7</span>]=&#123;<span class="hljs-number">23</span>,<span class="hljs-number">12</span>,<span class="hljs-number">49</span>,<span class="hljs-number">6</span>,<span class="hljs-number">31</span>,<span class="hljs-number">19</span>,<span class="hljs-number">28</span>&#125;;
+	
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序序列："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	Print(a,<span class="hljs-number">7</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>&lt;&lt;<span class="hljs-string">"划分过程"</span>&lt;&lt;<span class="hljs-built_in">endl</span>; 
+	QuickSort(a,<span class="hljs-number">0</span>,<span class="hljs-number">6</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>&lt;&lt;<span class="hljs-string">"排序结果："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	Print(a,<span class="hljs-number">7</span>);
+
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+<h2 id="选择排序"><a class="markdownIt-Anchor" href="#选择排序"></a> 选择排序</h2>
+<h3 id="简单选择排序simple-selection-sort"><a class="markdownIt-Anchor" href="#简单选择排序simple-selection-sort"></a> 简单选择排序（simple selection sort）</h3>
+<p><font color=red><strong>基本思想</strong></font>是第i趟排序从待排序序列中找到最小值，并和第i个记录交换，作为有序序列的第i个记录。</p>
+<h4 id="排序过程-4"><a class="markdownIt-Anchor" href="#排序过程-4"></a> 排序过程</h4>
+<ol>
+<li>将整个记录序列划分为有序区和无序区，初始时有序区为空，无序区含有待排序的所有记录。</li>
+<li>在无序区中选取关键码最小的记录，将它与无序区中的第一个记录交换，使得有序区扩展了一个记录，同时无序区减少了一个记录。</li>
+<li>不断重复2，直到无序区只剩下一个记录为止。此时所有的记录已经按关键码从小到大的顺序排列。</li>
+</ol>
+<p><strong>例如</strong>待排序序列<code>12,5,19,35,3</code><br />
+<img src="https://img-blog.csdnimg.cn/2020010216375163.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+从例子中可以看出<font color=green>每次排序，有序区的记录最终位置已经确定。</font></p>
+<h4 id="代码-6"><a class="markdownIt-Anchor" href="#代码-6"></a> 代码</h4>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SelectSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n<span class="hljs-number">-1</span>;i++)
+	&#123;
+		<span class="hljs-keyword">int</span> index=i;
+		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=i+<span class="hljs-number">1</span>;j&lt;n;j++)
+		&#123;
+			<span class="hljs-keyword">if</span> (a[j]&lt;a[index]) 
+				index=j;
+		&#125;
+		<span class="hljs-keyword">if</span> (index!=i)
+		&#123;
+			<span class="hljs-keyword">int</span> mid=a[i];
+			a[i]=a[index];
+			a[index]=mid;
+		&#125;
+	&#125;
+&#125;</code></pre>
+<h4 id="算法分析-5"><a class="markdownIt-Anchor" href="#算法分析-5"></a> 算法分析</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最好情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>平均</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1 )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-5"><a class="markdownIt-Anchor" href="#实例-5"></a> 实例</h4>
+<p><img src="https://img-blog.csdnimg.cn/202001031005112.png" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+<h2 id="-12-"><a class="markdownIt-Anchor" href="#-12-"></a> <pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)
+		<span class="hljs-built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="hljs-string">"  "</span>;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+&#125; 
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SelectSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n<span class="hljs-number">-1</span>;i++)
+	&#123;
+		<span class="hljs-keyword">int</span> index=i;
+		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=i+<span class="hljs-number">1</span>;j&lt;n;j++)
+		&#123;
+			<span class="hljs-keyword">if</span> (a[j]&lt;a[index]) 
+				index=j;
+		&#125;
+		<span class="hljs-keyword">if</span> (index!=i)
+		&#123;
+			<span class="hljs-keyword">int</span> mid=a[i];
+			a[i]=a[index];
+			a[index]=mid;
+		&#125;
+		<span class="hljs-comment">/*-------------排序过程--------------*/</span>
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"第"</span>&lt;&lt;i+<span class="hljs-number">1</span>&lt;&lt;<span class="hljs-string">"趟排序: "</span>; 
+		print(a,n);
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> a[<span class="hljs-number">9</span>]=&#123;<span class="hljs-number">20</span>,<span class="hljs-number">12</span>,<span class="hljs-number">65</span>,<span class="hljs-number">35</span>,<span class="hljs-number">62</span>,<span class="hljs-number">11</span>,<span class="hljs-number">43</span>,<span class="hljs-number">65</span>,<span class="hljs-number">98</span>&#125;;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序数组："</span>;
+	print(a,<span class="hljs-number">9</span>);
+	SelectSort(a,<span class="hljs-number">9</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序后数组："</span>;
+	print(a,<span class="hljs-number">9</span>);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></h2>
+<h3 id="堆排序heap-sort"><a class="markdownIt-Anchor" href="#堆排序heap-sort"></a> 堆排序（heap sort）</h3>
+<p>堆排序是简单选择排序的改进，是利用堆的特性进行排序的方法。<font color=red><strong>基本思想</strong></font>是（假设用大根堆）首先将待排序的记录序列构造成一个堆，选出堆中所有记录的最大者即堆顶的记录，然后将堆顶记录移走，并将剩余记录再调整成堆，这样又能找出一个当前最大的记录，以此类推，直到堆中只有一个记录为止。</p>
+<blockquote>
+<p><font color=black size=4 face=微软雅黑><strong>什么是堆？</strong></font><br />
+<font color=black face=微软雅黑 size=3><strong>堆（heap）</strong> 是具有下列性质的完全二叉树：每个结点的值都小于或等于其左右孩子结点的值（称为小根堆）；或者每个结点的值都大于或等于其左右孩子结点的值（称为大根堆）。顺序存储结构表示就是：</font></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">小</mi><mi mathvariant="normal">根</mi><mi mathvariant="normal">堆</mi><mrow><mo fence="true">{</mo><mtable rowspacing="0.3599999999999999em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>≤</mo><msub><mi>k</mi><mrow><mn>2</mn><mi>i</mi></mrow></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>≤</mo><msub><mi>k</mi><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow></mstyle></mtd></mtr></mtable></mrow><mn>1</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">小根堆\begin{cases}
+k_i \leq k_{2i}\\
+k_i \leq k_{2i+1}
+\end{cases}   1 \leq i \leq \lfloor n/2 \rfloor
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="mord cjk_fallback">小</span><span class="mord cjk_fallback">根</span><span class="mord cjk_fallback">堆</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79549em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">大</mi><mi mathvariant="normal">根</mi><mi mathvariant="normal">堆</mi><mrow><mo fence="true">{</mo><mtable rowspacing="0.3599999999999999em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>≥</mo><msub><mi>k</mi><mrow><mn>2</mn><mi>i</mi></mrow></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>≥</mo><msub><mi>k</mi><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow></mstyle></mtd></mtr></mtable></mrow><mn>1</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">大根堆\begin{cases}
+  k_i \geq k_{2i}\\
+  k_i \geq k_{2i+1}
+\end{cases}   1 \leq i \leq \lfloor n/2 \rfloor
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="mord cjk_fallback">大</span><span class="mord cjk_fallback">根</span><span class="mord cjk_fallback">堆</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79549em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span></span></p>
+<p><img src="https://img-blog.csdnimg.cn/20200103103038403.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /></p>
+</blockquote>
+<h4 id="排序过程-5"><a class="markdownIt-Anchor" href="#排序过程-5"></a> 排序过程</h4>
+<ol>
+<li><strong>将一个无序序列构造成一个堆，即初始建堆</strong><br />
+数据用顺序存储结构存储，将所有的<strong>数据都放在一个数组中</strong>，这就可以看成是一个<strong>完全二叉树的顺序存储结构。</strong> 接下来就只需要把它<font color=blue>调整成一个堆即可</font>。</li>
+<li><strong>处理堆顶记录</strong>：建好堆之后将待排序序列分为无序区和有序区两部分，其中无序区为堆，包括全部待排序记录，有序区是空的。将堆顶与堆中最后一个记录交换，则堆（无序区）中少了一记录，有序区增加一个记录。</li>
+<li><font color=blue>调整剩余记录</font>成一个新的堆</li>
+</ol>
+<p><font color=red size=4>如何把完全二叉树调整成堆？</font><br />
+以大根堆为例，堆的定义可以知道大根堆是双亲结点的值大于其左右孩子的节点，所以说在大根堆的调整过程中总是将根节点和左右孩子进行比较，若不满足堆的条件，则将根节点与左孩子或右孩子的较大者进行交换，这个调整过程一直进行到所有子树均为堆，或者被调整节点交换到叶子节点为止。<br />
+<img src="https://img-blog.csdnimg.cn/20200103111004921.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+因为数据是存储在数组中的，由完全二叉树的定义可以知道，有n个结点的完全二叉树，<strong>最后一个双亲结点(最后一个叶子结点的双亲)</strong> 的位置是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">\lfloor n/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>，则在数组中，只需要从<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>=</mo><mo stretchy="false">⌊</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">k= \lfloor n/2 \rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⌊</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">⌋</span></span></span></span>位置开始，与其位置为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>k</mi></mrow><annotation encoding="application/x-tex">2k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>k</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2k+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>的孩子结点比较，然后逐个向前调整，一直调整到第一个记录。<br />
+再举个栗子，<font color=red size=4>排序过程</font>，待排序序列<code>36,30,18,40,32,45,22,50</code><br />
+<img src="https://img-blog.csdnimg.cn/20200103133851815.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+……后边步骤不放了，应该能自己知道。具体代码看最后实例部分。</p>
+<h4 id="代码-7"><a class="markdownIt-Anchor" href="#代码-7"></a> 代码</h4>
+<p><font size=4><strong>写法一</strong></font><br />
+直接就这么写，从数组0号位开始，计算<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>的孩子结点就不能用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>k</mi></mrow><annotation encoding="application/x-tex">2k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>k</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2k+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，而应该在这个基础上+1。（因为根结点在<code>a[0]</code>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn><mo>∗</mo><mn>2</mn><mo>=</mo><mn>0</mn><mi mathvariant="normal">，</mi><mn>0</mn><mo>∗</mo><mn>2</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0*2=0，0*2+1=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord cjk_fallback">，</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，但是<code>a[0]</code>的孩子结点应的<code>a[1]a[2]</code>）</p>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sift</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i=low,j=<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>;<span class="hljs-comment">//i为待调整结点，j为其左孩子,注意数组是0开始的，所以左孩子在2*i+1的位置</span>
+	<span class="hljs-keyword">while</span>(j&lt;=high) <span class="hljs-comment">//必须有=，保证剩两个结点时能进行堆重构</span>
+	&#123;
+		<span class="hljs-keyword">if</span> (j&lt;high &amp;&amp; a[j]&lt;a[j+<span class="hljs-number">1</span>]) <span class="hljs-comment">//比较左右孩子，选出较大者 </span>
+			j++;
+		<span class="hljs-keyword">if</span>(a[i]&gt;=a[j])<span class="hljs-comment">//符合堆条件 </span>
+			<span class="hljs-keyword">break</span>;
+		<span class="hljs-keyword">else</span><span class="hljs-comment">//不符合堆的条件，进行调整 </span>
+		&#123;
+			swap(a[i],a[j]);
+			i=j;
+			j=<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>;
+		&#125;
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">HeapSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	n--; <span class="hljs-comment">//堆的第一个记录在数组的0号位，最后一个记录在数组的n-1号位 </span>
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=n/<span class="hljs-number">2</span>;i&gt;=<span class="hljs-number">0</span>;i--)<span class="hljs-comment">//从n/2开始调整 </span>
+		sift(a,i,n);
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)
+		<span class="hljs-comment">/*开始传入参数n为数组长度8，HeapSort中进行n--，此时n=7，</span>
+<span class="hljs-comment">		进行7趟即可，最后只剩一个根节点时自动并入有序区*/</span>
+	&#123;
+		swap(a[<span class="hljs-number">0</span>],a[n-i]);<span class="hljs-comment">//将第一个与堆中最后一个交换</span>
+		sift(a,<span class="hljs-number">0</span>,n-i<span class="hljs-number">-1</span>);<span class="hljs-comment">//此时堆就减少一个</span>
+	&#125;
+&#125;</code></pre>
+<p><font size=4><strong>写法二</strong></font><br />
+浪费一个数组空间<code>a[0]</code>，从<code>a[1]</code>开始存储数据。个人感觉这样写比较简单（其实没差别( ‘-ωก̀ )）。</p>
+<pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sift</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i=low,j=i*<span class="hljs-number">2</span>;
+	<span class="hljs-keyword">while</span>(j&lt;=high) 
+	&#123;
+		<span class="hljs-keyword">if</span> (j&lt;high &amp;&amp; a[j]&lt;a[j+<span class="hljs-number">1</span>]) 
+			j++;
+		<span class="hljs-keyword">if</span>(a[i]&gt;=a[j])
+			<span class="hljs-keyword">break</span>;
+		<span class="hljs-keyword">else</span>
+		&#123;
+			swap(a[i],a[j]);
+			i=j;
+			j=<span class="hljs-number">2</span>*i;
+		&#125;
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">HeapSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=n/<span class="hljs-number">2</span>;i&gt;=<span class="hljs-number">1</span>;i--)
+		sift(a,i,n);
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;n;i++)
+	&#123;
+		swap(a[<span class="hljs-number">1</span>],a[n-i+<span class="hljs-number">1</span>]);
+		sift(a,<span class="hljs-number">1</span>,n-i);
+	&#125;
+&#125;</code></pre>
+<h4 id="算法分析-6"><a class="markdownIt-Anchor" href="#算法分析-6"></a> 算法分析</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最好情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2 n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2 n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td>平均</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2 n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1 )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例-6"><a class="markdownIt-Anchor" href="#实例-6"></a> 实例</h4>
+<p><img src="https://img-blog.csdnimg.cn/20200103130942564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NjY3MTcw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="在这里插入图片描述" /><br />
+<font size=4><strong>写法一</strong></font></p>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++) 	
+		<span class="hljs-built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="hljs-string">"  "</span>;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+&#125; 
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sift</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i=low,j=<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>;					<span class="hljs-comment">//i为待调整结点，j为其左孩子</span>
+										<span class="hljs-comment">//数组是0开始的，所以左孩子在2*i+1的位置</span>
+	<span class="hljs-keyword">while</span>(j&lt;=high) 						<span class="hljs-comment">//必须有=，保证剩两个结点时能进行堆重构</span>
+	&#123;
+		<span class="hljs-keyword">if</span> (j&lt;high &amp;&amp; a[j]&lt;a[j+<span class="hljs-number">1</span>]) 		<span class="hljs-comment">//比较左右孩子，选出较大者 </span>
+			j++;
+		<span class="hljs-keyword">if</span>(a[i]&gt;=a[j])					<span class="hljs-comment">//符合堆条件 </span>
+			<span class="hljs-keyword">break</span>;
+		<span class="hljs-keyword">else</span>							<span class="hljs-comment">//不符合堆的条件，进行调整 </span>
+		&#123;
+			swap(a[i],a[j]);
+			i=j;
+			j=<span class="hljs-number">2</span>*i+<span class="hljs-number">1</span>;
+		&#125;
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">HeapSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	n--; 								<span class="hljs-comment">//堆的第一个记录在数组的0号位</span>
+										<span class="hljs-comment">//最后一个记录在数组的n-1号位 </span>
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=n/<span class="hljs-number">2</span>;i&gt;=<span class="hljs-number">0</span>;i--)				<span class="hljs-comment">//从n/2开始调整 </span>
+		sift(a,i,n);
+
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"无序区               有序区"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)
+		<span class="hljs-comment">/*开始传入参数n为数组长度8，HeapSort中进行n--，此时n=7，</span>
+<span class="hljs-comment">		进行7趟即可，最后只剩一个根节点时自动并入有序区*/</span>
+	&#123;
+		swap(a[<span class="hljs-number">0</span>],a[n-i]);				<span class="hljs-comment">//将第一个与堆中最后一个交换</span>
+		sift(a,<span class="hljs-number">0</span>,n-i<span class="hljs-number">-1</span>);				<span class="hljs-comment">//此时堆就减少一个</span>
+		<span class="hljs-comment">/*-----------输出过程-----------*/</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;n-i;j++)
+			<span class="hljs-built_in">cout</span>&lt;&lt;a[j]&lt;&lt;<span class="hljs-string">" "</span>;
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">" | "</span>;
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=n-i;j&lt;=n;j++)
+			<span class="hljs-built_in">cout</span>&lt;&lt;a[j]&lt;&lt;<span class="hljs-string">" "</span>;
+		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> a[<span class="hljs-number">8</span>]=&#123;<span class="hljs-number">36</span>,<span class="hljs-number">30</span>,<span class="hljs-number">18</span>,<span class="hljs-number">40</span>,<span class="hljs-number">32</span>,<span class="hljs-number">45</span>,<span class="hljs-number">22</span>,<span class="hljs-number">50</span>&#125;;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序数组："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	print(a,<span class="hljs-number">8</span>);
+	HeapSort(a,<span class="hljs-number">8</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"排序结果："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	print(a,<span class="hljs-number">8</span>);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+<p><font size=4><strong>写法二</strong></font></p>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) 
+		<span class="hljs-built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="hljs-string">"  "</span>;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+&#125; 
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sift</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> low,<span class="hljs-keyword">int</span> high)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> i=low,j=i*<span class="hljs-number">2</span>;
+	<span class="hljs-keyword">while</span>(j&lt;=high) 
+	&#123;
+		<span class="hljs-keyword">if</span> (j&lt;high &amp;&amp; a[j]&lt;a[j+<span class="hljs-number">1</span>]) 
+			j++;
+		<span class="hljs-keyword">if</span>(a[i]&gt;=a[j])
+			<span class="hljs-keyword">break</span>;
+		<span class="hljs-keyword">else</span>
+		&#123;
+			swap(a[i],a[j]);
+			i=j;
+			j=<span class="hljs-number">2</span>*i;
+		&#125;
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">HeapSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a[],<span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=n/<span class="hljs-number">2</span>;i&gt;=<span class="hljs-number">1</span>;i--)
+		sift(a,i,n);
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;n;i++)
+	&#123;
+		swap(a[<span class="hljs-number">1</span>],a[n-i+<span class="hljs-number">1</span>]);
+		sift(a,<span class="hljs-number">1</span>,n-i);
+	&#125;
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+	<span class="hljs-keyword">int</span> a[<span class="hljs-number">9</span>]=&#123;<span class="hljs-number">0</span>,<span class="hljs-number">36</span>,<span class="hljs-number">30</span>,<span class="hljs-number">18</span>,<span class="hljs-number">40</span>,<span class="hljs-number">32</span>,<span class="hljs-number">45</span>,<span class="hljs-number">22</span>,<span class="hljs-number">50</span>&#125;;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"待排序数组："</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	print(a,<span class="hljs-number">8</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"HeapSort:"</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	HeapSort(a,<span class="hljs-number">8</span>);
+	print(a,<span class="hljs-number">8</span>);
+	<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-built_in">endl</span>;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+<h1 id="各种排序的比较"><a class="markdownIt-Anchor" href="#各种排序的比较"></a> 各种排序的比较</h1>
+<table>
+<thead>
+<tr>
+<th>排序方法</th>
+<th>平均情况</th>
+<th>最好情况</th>
+<th>最坏情况</th>
+<th>辅助空间</th>
+<th>稳定性</th>
+<th>适用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接插入排序</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td>O(1)</td>
+<td>稳定</td>
+<td>顺序存储、链式存储</td>
+</tr>
+<tr>
+<td>希尔排序</td>
+<td>/</td>
+<td>/</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td>O(1)</td>
+<td>不稳定</td>
+<td>顺序存储</td>
+</tr>
+<tr>
+<td>冒泡排序</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td>O(1)</td>
+<td>稳定</td>
+<td>顺序存储、链式存储</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo><mo>−</mo><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(log_2n) - O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td>不稳定</td>
+<td>顺序存储、链式存储</td>
+</tr>
+<tr>
+<td>简单选择排序</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
+<td>O(1)</td>
+<td>不稳定</td>
+<td>顺序存储、链式存储</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(nlog_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
+<td>O(1)</td>
+<td>不稳定</td>
+<td>顺序存储、链式存储</td>
+</tr>
+</tbody>
+</table>
+<p><font color=red>补充</font>：希尔排序比较特殊，详细看上边链接。</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/">排序</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-info">版权声明：本文为原创文章，遵循<a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。未经允许禁止转载！转载请附上原文出处链接及本声明！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/25/4%202020%E5%B9%B4%E7%BA%AA%E5%BD%95%E7%89%87/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2020年纪录片清单</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/05/24/2%20%E5%8A%A8%E6%BC%AB%E8%AE%B0%E5%BD%95/">
+                        <span class="hidden-mobile">我的动漫记录</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+    <!-- APlayer 音乐播放器 -->
+    <div id="aplayer"></div>
+    <script defer src="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js" ></script>
+<link  rel="stylesheet" href="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css" />
+<script type="text/javascript">
+  var oldLoadAp = window.onload;
+  window.onload = function () {
+    oldLoadAp && oldLoadAp();
+
+    new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true,
+      autoplay: 'true' === 'true',
+      loop: 'all',
+      order: 'list',
+      theme: '#CDA398',
+      preload: 'none',
+      audio: [{"name":"Town of Windmill","artist":"a_hisa","url":"http://q9gcf8wjw.bkt.clouddn.com/a_hisa%20-%20Town%20of%20Windmill.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"},{"name":"月杜","artist":"CarrotWine","url":"http://q9gcf8wjw.bkt.clouddn.com/CarrotWine%20-%20%E6%9C%88%E6%9D%9C.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"},{"name":"A Place to Call Home","artist":"Evan Call","url":"http://q9gcf8wjw.bkt.clouddn.com/Evan%20Call%20-%20A%20Place%20to%20Call%20Home.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"},{"name":"The Voice in My Heart","artist":"Evan Call","url":"http://q9gcf8wjw.bkt.clouddn.com/Evan%20Call%20-%20The%20Voice%20in%20My%20Heart.mp3","cover":"http://q9gcf8wjw.bkt.clouddn.com/%E5%A4%B4%E5%83%8F.jpg"}]
+    });
+  }
+</script>
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "排序算法总结&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 77,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+<!-- KaTeX -->
+<link  rel="stylesheet" href="https://cdn.staticfile.org/KaTeX/0.11.1/katex.min.css" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
