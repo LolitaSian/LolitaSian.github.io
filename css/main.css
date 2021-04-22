@@ -1273,6 +1273,10 @@ h6::before {
   float: left;
   margin-bottom: 10px;
 }
+.markdown-body blockquote {
+  border-left-color: #f9ebe9 !important;
+  color: #8e8e8e;
+}
 .list-group a ~ p.h5 {
   margin-top: 1rem;
 }
