@@ -13,26 +13,32 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#DDDFE2">
-  <meta name="author" content="Ann">
+  <meta name="author" content="Sian">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Two Sum">
+    <meta name="description" content="前提条件   已安装CUDA   已安装git   已安装Anaconda 直接安装Anaconda不要指望Linux自带的Python。虽然Linux自带的Python，但是缺胳膊少腿，所以还是直接用了conda。     捣鼓好Stable Diffusion WebUI需要的环境 创建并激活进入虚拟环境： conda create -n webui python&#x3D;3.10.6 conda">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode Top 100 Liked Questions">
-<meta property="og:url" content="http://yoursite.com/2023/02/09/16%20%E5%88%B7%E9%A2%98%20Top%20100%20liked%20questions/index.html">
-<meta property="og:site_name" content="Ann&#39;s Blog">
-<meta property="og:description" content="Two Sum">
+<meta property="og:title" content="Linux上如何使用Stable Diffusion WebUI">
+<meta property="og:url" content="http://yoursite.com/2023/03/11/18%20Stable%20Diffusion%20WebUI%20Linux/index.html">
+<meta property="og:site_name" content="Sian&#39;s Blog">
+<meta property="og:description" content="前提条件   已安装CUDA   已安装git   已安装Anaconda 直接安装Anaconda不要指望Linux自带的Python。虽然Linux自带的Python，但是缺胳膊少腿，所以还是直接用了conda。     捣鼓好Stable Diffusion WebUI需要的环境 创建并激活进入虚拟环境： conda create -n webui python&#x3D;3.10.6 conda">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-02-09T12:39:00.000Z">
-<meta property="article:modified_time" content="2023-02-09T12:40:50.430Z">
-<meta property="article:author" content="Ann">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="刷题">
-<meta property="article:tag" content="LeetCode">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f2ca8fe4dc434233a5f9d1c862d5f650~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a833c0bd2e824fa3b37582f076096a73~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/04d85cb64ad74628963a02cd543d4545~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/60024f4977954ff0a4b60b5ae34d9689~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ea94933fc5e4b08a01e038bb2137cfc~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426e9e91026040a3a7e42c20cfc10462~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="article:published_time" content="2023-03-11T03:26:00.000Z">
+<meta property="article:modified_time" content="2023-03-21T13:32:52.132Z">
+<meta property="article:author" content="Sian">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="Diffusion Model">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f2ca8fe4dc434233a5f9d1c862d5f650~tplv-k3u1fbpfcp-zoom-1.image">
   
   
-  <title>LeetCode Top 100 Liked Questions - Ann&#39;s Blog</title>
+  <title>Linux上如何使用Stable Diffusion WebUI - Sian&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -166,7 +172,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="LeetCode Top 100 Liked Questions">
+            <span class="h2" id="subtitle" title="Linux上如何使用Stable Diffusion WebUI">
               
             </span>
 
@@ -176,8 +182,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2023-02-09 20:39" pubdate>
-        2023年2月9日 晚上
+      <time datetime="2023-03-11 11:26" pubdate>
+        2023年3月11日 上午
       </time>
     </span>
   
@@ -187,7 +193,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6 字
+      2.7k 字
     </span>
   
 
@@ -196,7 +202,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1 分钟
+      23 分钟
     </span>
   
 
@@ -225,10 +231,72 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">LeetCode Top 100 Liked Questions</h1>
+            <h1 style="display: none">Linux上如何使用Stable Diffusion WebUI</h1>
             
             <div class="markdown-body">
-              <h1 id="two-sum"><a class="markdownIt-Anchor" href="#two-sum"></a> <a target="_blank" rel="noopener" href="https://leetcode.com/problems/two-sum/">Two Sum</a></h1>
+              <h1 id="前提条件"><a class="markdownIt-Anchor" href="#前提条件"></a> 前提条件</h1>
+<ol>
+<li>
+<p>已安装CUDA</p>
+</li>
+<li>
+<p>已安装git</p>
+</li>
+<li>
+<p>已安装Anaconda</p>
+<p>直接安装Anaconda不要指望Linux自带的Python。虽然Linux自带的Python，但是缺胳膊少腿，所以还是直接用了conda。</p>
+</li>
+</ol>
+<hr>
+<h1 id="捣鼓好stable-diffusion-webui需要的环境"><a class="markdownIt-Anchor" href="#捣鼓好stable-diffusion-webui需要的环境"></a> 捣鼓好Stable Diffusion WebUI需要的环境</h1>
+<p>创建并激活进入虚拟环境：</p>
+<p><code>conda create -n webui python=3.10.6</code></p>
+<p><code>conda activate webui</code></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f2ca8fe4dc434233a5f9d1c862d5f650~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt></p>
+<p>成功进入虚拟环境之后就可以开搞了。</p>
+<hr>
+<h1 id="下载stable-diffusion-webui"><a class="markdownIt-Anchor" href="#下载stable-diffusion-webui"></a> 下载Stable Diffusion WebUI</h1>
+<p>从github上下载，终端中输入：</p>
+<p><code>git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code></p>
+<p>进入文件夹：</p>
+<p><code>cd stable-diffusion-webui</code></p>
+<p>为了减少你的麻烦，请做好以下几个<strong>铺垫步骤</strong>：</p>
+<h3 id="pip换源"><a class="markdownIt-Anchor" href="#pip换源"></a> pip换源</h3>
+<p><code>pip config set global.index-url &lt;http://mirrors.aliyun.com/pypi/simple/&gt;</code></p>
+<p><code>pip config set global.trusted-host mirrors.aliyun.com</code></p>
+<blockquote>
+<p><strong>笔者提示：</strong> 安装过程中可能会遇到奇怪的问题，<strong>一般都是网络造成的</strong>，很大一部分是pip源造成的。</p>
+<p>我搭的时候弄得阿里云源，疯狂报错。师兄搭的时候用的清华源，一下就成功了。我又配另一个服务器，阿里云全部成功。我俩复盘了一下，就是当时网络的问题。所以阿里云源不好使，多换几个别的。</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a833c0bd2e824fa3b37582f076096a73~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+</blockquote>
+<h3 id="修改lunchpy"><a class="markdownIt-Anchor" href="#修改lunchpy"></a> <a target="_blank" rel="noopener" href="http://xn--lunch-3u3h158j.py">修改lunch.py</a></h3>
+<p>找到下面这段代码，给每个github地址前边都加上<a target="_blank" rel="noopener" href="https://ghproxy.com/">https://ghproxy.com/</a></p>
+<figure class="highlight py"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></div></td><td class="code"><pre><code class="hljs py"><span class="hljs-keyword">def</span> <span class="hljs-title function_">prepare_environment</span>():<br>    <span class="hljs-keyword">global</span> skip_install<br><br>    torch_command = os.environ.get(<span class="hljs-string">&#x27;TORCH_COMMAND&#x27;</span>, <span class="hljs-string">&quot;pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117&quot;</span>)<br>    requirements_file = os.environ.get(<span class="hljs-string">&#x27;REQS_FILE&#x27;</span>, <span class="hljs-string">&quot;requirements_versions.txt&quot;</span>)<br>    commandline_args = os.environ.get(<span class="hljs-string">&#x27;COMMANDLINE_ARGS&#x27;</span>, <span class="hljs-string">&quot;&quot;</span>)<br><br>    xformers_package = os.environ.get(<span class="hljs-string">&#x27;XFORMERS_PACKAGE&#x27;</span>, <span class="hljs-string">&#x27;xformers==0.0.16rc425&#x27;</span>)<br>    gfpgan_package = os.environ.get(<span class="hljs-string">&#x27;GFPGAN_PACKAGE&#x27;</span>, <span class="hljs-string">&quot;git+https://github.com/TencentARC/GFPGAN.git@8d2447a2d918f8eba5a4a01463fd48e45126a379&quot;</span>)<br>    clip_package = os.environ.get(<span class="hljs-string">&#x27;CLIP_PACKAGE&#x27;</span>, <span class="hljs-string">&quot;git+https://github.com/openai/CLIP.git@d50d76daa670286dd6cacf3bcd80b5e4823fc8e1&quot;</span>)<br>    openclip_package = os.environ.get(<span class="hljs-string">&#x27;OPENCLIP_PACKAGE&#x27;</span>, <span class="hljs-string">&quot;git+https://github.com/mlfoundations/open_clip.git@bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b&quot;</span>)<br><br>    stable_diffusion_repo = os.environ.get(<span class="hljs-string">&#x27;STABLE_DIFFUSION_REPO&#x27;</span>, <span class="hljs-string">&quot;https://github.com/Stability-AI/stablediffusion.git&quot;</span>)<br>    taming_transformers_repo = os.environ.get(<span class="hljs-string">&#x27;TAMING_TRANSFORMERS_REPO&#x27;</span>, <span class="hljs-string">&quot;https://github.com/CompVis/taming-transformers.git&quot;</span>)<br>    k_diffusion_repo = os.environ.get(<span class="hljs-string">&#x27;K_DIFFUSION_REPO&#x27;</span>, <span class="hljs-string">&#x27;https://github.com/crowsonkb/k-diffusion.git&#x27;</span>)<br>    codeformer_repo = os.environ.get(<span class="hljs-string">&#x27;CODEFORMER_REPO&#x27;</span>, <span class="hljs-string">&#x27;https://github.com/sczhou/CodeFormer.git&#x27;</span>)<br>    blip_repo = os.environ.get(<span class="hljs-string">&#x27;BLIP_REPO&#x27;</span>, <span class="hljs-string">&#x27;https://github.com/salesforce/BLIP.git&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>修改完成之后如图：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/04d85cb64ad74628963a02cd543d4545~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt></p>
+<blockquote>
+<p><strong>笔者提示：</strong> 刚才说安装过程中可能会遇到奇怪的问题，<strong>一般都是网络造成的</strong>，另一个原因就是从github下载东西的时候失败，所以这里直接加个代理省事。用梯子也不好使。</p>
+</blockquote>
+<h3 id="下载默认模型"><a class="markdownIt-Anchor" href="#下载默认模型"></a> 下载默认模型</h3>
+<blockquote>
+<p><strong>笔者提示：</strong> 这一步不是必须的，webui.sh会自动运行下载的，但是我用服务器下的巨慢，所以手动下的。</p>
+</blockquote>
+<p>下载 <a target="_blank" rel="noopener" href="https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors">v1-5-pruned-emaonly.safetensors</a>，放到<code>stable-diffusion-webui/models/Stable-diffusion/</code>里：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/60024f4977954ff0a4b60b5ae34d9689~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt></p>
+<h1 id="使用webui"><a class="markdownIt-Anchor" href="#使用webui"></a> 使用webui</h1>
+<p>终端输入启动webui：</p>
+<p><code>bash webui.sh</code></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ea94933fc5e4b08a01e038bb2137cfc~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt></p>
+<p><strong>出现URL就是成功！</strong> 点击链接用浏览器打开。</p>
+<hr>
+<h1 id="开始画图吧"><a class="markdownIt-Anchor" href="#开始画图吧"></a> 开始画图吧！</h1>
+<p>Give it a try yourself！</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426e9e91026040a3a7e42c20cfc10462~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt></p>
+<h1 id="附录"><a class="markdownIt-Anchor" href="#附录"></a> 附录</h1>
+<ol>
+<li>Stable Diffusion Webui：<a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111/stable-diffusion-webui: Stable Diffusion web UI (github.com)</a></li>
+<li>Stable Diffusion Webui 文档：<a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki">Home · AUTOMATIC1111/stable-diffusion-webui Wiki (github.com)</a></li>
+</ol>
 
             </div>
             <hr>
@@ -239,11 +307,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                      <a class="hover-with-bg" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%88%B7%E9%A2%98/">刷题</a>
-                    
-                      <a class="hover-with-bg" href="/tags/LeetCode/">LeetCode</a>
+                      <a class="hover-with-bg" href="/tags/Diffusion-Model/">Diffusion Model</a>
                     
                   </div>
                 
@@ -259,6 +325,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/03/16/16%20%E5%9B%BE%E8%A7%A3Stable%20Diffusion/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">图解Stable Diffusion</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
