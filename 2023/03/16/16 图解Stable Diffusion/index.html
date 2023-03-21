@@ -58,7 +58,7 @@
 <meta property="og:image" content="http://yoursite.com/img/translate/16-33.png">
 <meta property="og:image" content="http://yoursite.com/img/translate/16-34.png">
 <meta property="article:published_time" content="2023-03-16T08:03:00.000Z">
-<meta property="article:modified_time" content="2023-03-21T13:58:28.186Z">
+<meta property="article:modified_time" content="2023-03-21T14:33:15.683Z">
 <meta property="article:author" content="Sian">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="Diffusion Model">
@@ -271,30 +271,30 @@
 <p>高性能模型：图像质量高、生成速度快并且相对来说对内存等资源的要求较小。</p>
 <p>在试过AI图像生成后，你肯定想知道其背后原理。</p>
 <p>本文就是对Stable Diffusion工作原理的简要介绍。</p>
-<p><img src="/img/translate/16-1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-1.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>Stable Diffusion非常灵活，可以用不同的方式进行图像生成。</p>
 <p>我们先来看一下只用文本来生成图像（text2img）。上图向我们展示了输入文本通过Stable Diffusion的生成的结果。</p>
 <p>除了从文本中生成图像之外，另一种主要的生成方法是修改图片，输入是文本和图像。</p>
 <p>比如下图，输入一张图片，再加上文字，图片就可以根据文字内容修改图像。</p>
-<p><img src="/img/translate/16-2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-2.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>现在让我们深入了解一下。解释一下不同的组件之间是如何作用的，以及图像生成中选项、参数的含义。</p>
 <h1 id="stable-diffusion的组成部分"><a class="markdownIt-Anchor" href="#stable-diffusion的组成部分"></a> Stable Diffusion的组成部分</h1>
 <p>Stable Diffusion是由几个组件和模型共同组成的，不是一个单一模型。</p>
 <p>当我们深入了解的时候，我们首先可以看到一个文本理解组件，它将文本信息转化为数字表示，用于捕获文本中的信息。</p>
-<p><img src="/img/translate/16-3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-3.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>刚才我们是从更高层面看的整个模型，接下来本文会深入讲一下机器学习的细节。</p>
 <p>其中的文本编码器是一个特殊的Transformer语言模型，其实就是CLIP模型的文本编码器。文本编码器接受输入文本，输出代表每个单词或token的向量。然后将这些信息提供给图像生成器。</p>
-<p><img src="/img/translate/16-4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-4.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>图像生成要经过两个阶段：</p>
 <h2 id="1-图像信息生成器"><a class="markdownIt-Anchor" href="#1-图像信息生成器"></a> 1. 图像信息生成器</h2>
 <p>这个组件是Stable Diffusion技术的秘密武器。它的实现是Stable Diffusion暴打前人模型获得更好的性能的关键。</p>
 <p>这个组件通过多个步骤来生成图像信息。<strong>步骤</strong> 这个是Stable Diffusion的参数，通常默认为50或100。</p>
 <p>图像信息生成器完全在图像信息空间（或潜空间）中运行。我们稍后会详细讨论这意味着什么。这个特性使Stable Diffusion比以前在像素空间中工作的扩散模型更快。在技术是线上，这个组件由一个U-Net神经网络和一个调度算法组成。</p>
 <p>“扩散”一词描述了在这个组件中发生的事情。信息一步步被处理，最后生成高质量的图像（生成这一步是由下一个组件图像解码器进行的）。</p>
-<p><img src="/img/translate/16-5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-5.png" srcset="/img/loading.gif" lazyload alt></p>
 <h2 id="2-图像解码器"><a class="markdownIt-Anchor" href="#2-图像解码器"></a> 2. 图像解码器</h2>
 <p>图像解码器 用 信息生成器中获取的信息 画出图像。它只在整个画图过程结束时运行一次，产生最终的图像。</p>
-<p><img src="/img/translate/16-6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-6.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>通过这个，我们可以看到组成Stable Diffusion的三个主要组件（每个组件都有自己的神经网络）：</p>
 <ul>
 <li>
@@ -313,79 +313,79 @@
 输出：生成的图像（维度：（3, 512, 512），即（红色/绿色/蓝色，宽度，高度））</p>
 </li>
 </ul>
-<p><img src="/img/translate/16-7.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-7.png" srcset="/img/loading.gif" lazyload alt></p>
 <h1 id="所以什么是扩散"><a class="markdownIt-Anchor" href="#所以什么是扩散"></a> 所以什么是“扩散”?</h1>
 <p>“扩散”指的是下图中粉色这一块组件“图像信息生成器”中发生的处理过程。该组件获取<strong>能表示输入文本信息的token嵌入</strong>和<strong>一个随机初始化的图像信息张量</strong>（aka 潜变量），然后用它们生成一个信息张量，把这个信息张量交给图像解码器，去生成最终的图像。</p>
-<p><img src="/img/translate/16-8.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-8.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>这个过程是一步一步进行的，逐步添加相关信息。想更直观的了解这个过程的话我们可以去检查随机潜变量那个张量，可以看到它逐步转变为图像噪声。这个检查过程需要借助图像解码器进行。</p>
 <p>作者意思是，这个扩散过程是一步一步进行的，初始时候潜变量张量是随机的，每一步都给它加上一点文本相关信息。怎么知道它是逐步进行的？我们可以检查处理过程中的潜变量张量的变化，把其中一步的张量放到图像解码器中去生成，可以看到生成的东西从随机噪声变为我们想要的东西。</p>
-<p><img src="/img/translate/16-9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-9.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>整个扩散过程需要很多步，每个步骤都对输入的潜变量矩阵进行操作，并生成下一步的潜变量矩阵，生成的这个潜变量矩阵会比前一步生成结果更符合输入信息，也会更像模型从训练集中获取的视觉信息。</p>
-<p><img src="/img/translate/16-10.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-10.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>通过下图我们可以直观地看到这些潜变量即集合每一步都添加了什么信息。</p>
-<p><img src="/img/translate/16-11.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-11.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>整个处理过程如下图：</p>
 <p>我们可以看到第二步和第四步效果尤其惊人，就好像一堆噪声中突然就显示出了轮廓。</p>
-<p><img src="/img/translate/16-12.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-12.png" srcset="/img/loading.gif" lazyload alt></p>
 <h2 id="扩散步骤是如何工作的"><a class="markdownIt-Anchor" href="#扩散步骤是如何工作的"></a> 扩散步骤是如何工作的</h2>
 <p>扩散模型图像生成的核心要依赖于强大的计算机视觉领域的模型。在足够大的数据集的基础上，这些模型可以学会很多复杂运算。扩散模型通过如下方式建模问题以实现图像生成：</p>
 <p>假设我们有一个图像，我们首先生成一些噪声，然后将这些噪声添加到图像上。</p>
 <p>这里是广义的噪声，不只是声音上的狭义噪声。对于图像来说，照片中的噪点导致图像模糊，我们就可以认为这些噪点是当前图像上的噪声。</p>
-<p><img src="/img/translate/16-13.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-13.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>我们可以将这看成是一个训练示例。之后我们使用同样的方法去创建更多的训练示例，然后用这些示例去训练我们图像生成模型的核心组件。</p>
-<p><img src="/img/translate/16-14.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-14.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>虽然上图例子展示了从图像到噪音图的一些噪音值只有四步（0步不添加噪音，第4步将图像破坏为完全噪音），但实际上我们可以很容易控制给图像添加多少噪音，因此我们可以将整个过程分散到数十个步骤中，为数据集中的每个图像创建数十个训练示例。</p>
-<p><img src="/img/translate/16-15.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-15.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>有了这个数据集，我们就可以训练噪声预测器了。训练完后会得到一个在特定配置下运行时可以生成图像的预测器。如果你接触过机器学习，那训练步骤看起来应该很熟悉。</p>
-<p><img src="/img/translate/16-16.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-16.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>接下来我们来看看 Stable Diffusion 是如何生成图像的。</p>
 <h2 id="通过降噪生成图片"><a class="markdownIt-Anchor" href="#通过降噪生成图片"></a> 通过降噪生成图片</h2>
 <p>训练好的噪声预测器，接受一张带噪图片和噪声步长作为输入，输出是它预测的噪声。</p>
-<p><img src="/img/translate/16-17.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-17.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>预测出来噪声之后，如果我们从带噪图片中减去这个噪声，那我们得到的图像就会得到一张和原始图片接近的图。（当然这里的“图”指的不是图像本身，而是图像服从的分布，这个分布是图像像素的分布方式，决定了天空通常是蓝色并高于地面，人们有两只眼睛，猫……）</p>
-<p><img src="/img/translate/16-18.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-18.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>如果模型训练集的图片质量比较高，那训练出来的模型产生的图像也会比较好看。比如 Stable Diffusion用到了LAION Aesthetics训练集。如果我们在 logo 图像上对其进行训练，那么我们最终会得到一个 logo 生成模型。</p>
-<p><img src="/img/translate/16-19.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-19.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>到这里我们就讲完了关于扩散模型图像生成的过程，主要是根据Denoising Diffusion Probabilistic Models描述的。现在你已经掌握了扩散的基本概念。你不仅了解了 Stable Diffusion，还了解了DALL·E 2 和谷歌 Imagen 的主要组件。</p>
 <p>注意嗷，到目前为止，我们描述的扩散过程生成的图像不使用任何文本数据。如果我们直接用这个模型，它会生成好看的图，但我们无法控制它生成的是什么东西，可能是金字塔，可能是猫，还是其他任何东西。在接下来的内容中，我们讲一下如何将文本提示加入到图像生成过程中，以便控制模型生成的图像类型。</p>
 <h1 id="速度提升扩散在压缩数据中进行而不是在图像上进行"><a class="markdownIt-Anchor" href="#速度提升扩散在压缩数据中进行而不是在图像上进行"></a> 速度提升：扩散在压缩数据中进行而不是在图像上进行</h1>
 <p>为了加快图像生成的过程，稳定扩散（Stable Diffusion）论文并不直接对像素图像进行扩散过程，而是对图像的压缩版本进行扩散。该论文称之为“转移到潜空间”。</p>
 <p>压这种压缩（以及之后的解压缩/绘制）是通过自编码器实现的，自编码器使用编码器将图像压缩到潜在空间中，然后解码器可以重构潜在空间上压缩后的信息获得原图像。</p>
-<p><img src="/img/translate/16-20.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-20.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>现在，正向扩散过程是在压缩的潜在空间中完成的。噪声片段是应用于这些潜变量的噪声，而不是像素图像。因此，噪声预测器实际上是训练在压缩表示（潜空间）中预测噪声的。</p>
-<p><img src="/img/translate/16-21.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-21.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>正向过程（使用自编码器的编码器）中我们生成训练噪声预测器所需的数据。训练完毕后，我们就可以通过运行逆向过程（使用自编码器的解码器）来生成图像。</p>
-<p><img src="/img/translate/16-22.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-22.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>这两个流程在LDM/Stable Diffusion论文的图3中是这么画的：</p>
-<p><img src="/img/translate/16-23.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-23.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>这张图右边部分还展示了“条件”组件，这个组件是模型生成图像过程中增加文字提示的，现在让我们往下深挖这个图像的文本提示组件：</p>
 <h2 id="文本编码器一种-transformer-语言模型"><a class="markdownIt-Anchor" href="#文本编码器一种-transformer-语言模型"></a> 文本编码器：一种 Transformer 语言模型</h2>
 <p>Transformer 语言模型作为语言理解组件，能够接受文本提示词并生成 token embeddings。Stable Diffusion 模型使用的是 ClipText（基于 GPT 的模型），而论文中用的是BERT。</p>
 <p>谷歌的 Imagen 论文表明，语言模型的选择对图像生成质量是非常重要的。你换个更大的图像生成组件 不如 换个更大的语言模型 对生成图像的质量的影响大。</p>
-<p><img src="/img/translate/16-24.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-24.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>早期的 Stable Diffusion 模型仅使用了 OpenAI 发布的预训练模型 ClipText。未来模型可能转向新发布的更大的 CLIP 变体 OpenCLIP。（更新于 2022 年 11 月，详情见 <a target="_blank" rel="noopener" href="https://stability.ai/blog/stable-diffusion-v2-release">Stable Diffusion V2 uses OpenClip</a>。与仅含有 630 万文本模型参数的 ClipText 相比，OpenCLIP 文本模型参数多达 3.54 亿。）</p>
 <h3 id="clip是如何训练的"><a class="markdownIt-Anchor" href="#clip是如何训练的"></a> CLIP是如何训练的</h3>
 <p>CLIP 模型是在图像-文本数据对上训练的。可以将该数据集想象成下图中的形式，只不过该数据集包含了4亿张图像和相应的说明：</p>
-<p><img src="/img/translate/16-25.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-25.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>实际上，CLIP数据集是网络上抓取的图像及其“alt”标签上的文本。</p>
 <p>CLIP 是图像编码器和文本编码器的结合。简单来说，训练过程可以简化为将图像和其说明进行编码。</p>
-<p><img src="/img/translate/16-26.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-26.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>然后使用余弦相似度比较它们的嵌入向量。</p>
 <p>当我们开始训练时，即使文本正确地描述了图像，相似度计算出来也会很低。</p>
-<p><img src="/img/translate/16-27.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-27.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>所以我们更新这两个模型，以便下一次嵌入它们时，生成的嵌入向量更加相似。</p>
-<p><img src="/img/translate/16-28.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-28.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>使用较大的batch size在整个数据集上重复这个过程，我们最终得到编码器能够生成嵌入向量，在这些向量中，一张狗的图片和句子“一张狗的照片”是相似的。就像在Word2vec中一样，训练过程还需要包括图像和文本描述不匹配的样本对作为负样，并且需要模型在计算这些负样本的时候给它们较低的相似度分数。</p>
 <h2 id="将文本信息融入图像生成过程"><a class="markdownIt-Anchor" href="#将文本信息融入图像生成过程"></a> 将文本信息融入图像生成过程</h2>
 <p>为了将文本加到图像生成过程中，我们必须调整噪声预测器，让它能接受文本作为输入。</p>
-<p><img src="/img/translate/16-29.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-29.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>我们的数据集现在再加上一项：编码的文本。</p>
 <p>由于我们在潜在空间中进行计算的，因此输入图像和预测噪声都在潜在空间中。</p>
-<p><img src="/img/translate/16-30.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-30.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>为了更好地理解文本token在U-net中的使用方式，让我们进一步讲一下U-Net。</p>
 <h3 id="无文本的u-net噪声预测器"><a class="markdownIt-Anchor" href="#无文本的u-net噪声预测器"></a> 无文本的U-net噪声预测器</h3>
 <p>首先让我们看一下不使用文本的扩散Unet的输入和输出如何：</p>
-<p><img src="/img/translate/16-31.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-31.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>我们可以看到：</p>
 <ul>
 <li>U-net是一系列层，用于转换潜在张量</li>
@@ -393,12 +393,12 @@
 <li>一些输出通过残差连接添加到网络的后续处理中</li>
 <li>在每层中会把时间步转换为时间步嵌入向量</li>
 </ul>
-<p><img src="/img/translate/16-32.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-32.png" srcset="/img/loading.gif" lazyload alt></p>
 <h3 id="带文本的u-net噪声预测器"><a class="markdownIt-Anchor" href="#带文本的u-net噪声预测器"></a> 带文本的U-net噪声预测器</h3>
 <p>现在让我们看看如何修改预测器，让它能加上文本内容。</p>
-<p><img src="/img/translate/16-33.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-33.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>我们需要其支持文本输入（术语：文本控制），主要是在ResNet块之间添加一个注意力层。</p>
-<p><img src="/img/translate/16-34.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="/img/translate/16-34.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>请注意，ResNet块不会直接看文本是什么。但是，注意力层可以将这些文本表示合并到潜在表示中。现在，下一个ResNet就可以在其处理中过程中利用这些整合的到潜在表示中的文本信息了。</p>
 <h1 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h1>
 <p>我希望这篇文章能让你对Stable Diffusion工作原理有一个初步认识，还有很多其他概念，我相信如果你了解了上边讲的内容，那你会很容易理解其他本文中没提到的概念。</p>
@@ -412,7 +412,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ltLNYA3lWAQ">https://www.youtube.com/watch?v=ltLNYA3lWAQ</a></li>
 <li>论文原文：<a target="_blank" rel="noopener" href="https://ommer-lab.com/research/latent-diffusion-models/">https://ommer-lab.com/research/latent-diffusion-models/</a></li>
 <li>如果想深入了解其中的数学原理https://lilianweng.github.io/posts/2021-07-11-diffusion-models/</li>
-<li>观看fast.ai的技术视频https://www.youtube.com/watch?v=_7rMfsA24Ls&amp;ab_channel=JeremyHoward</li>
+<li>观看fast.ai的技术视频https://www.youtube.com/watchv=_7rMfsA24Ls&amp;ab_channel=JeremyHoward</li>
 </ul>
 
             </div>

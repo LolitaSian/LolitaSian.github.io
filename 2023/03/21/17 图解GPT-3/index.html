@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://yoursite.com/img/translate/17-11.gif">
 <meta property="og:image" content="http://yoursite.com/img/translate/17-12.gif">
 <meta property="article:published_time" content="2023-03-21T13:27:00.000Z">
-<meta property="article:modified_time" content="2023-03-21T14:10:13.337Z">
+<meta property="article:modified_time" content="2023-03-21T14:33:47.059Z">
 <meta property="article:author" content="Sian">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="NLP">
@@ -268,9 +268,9 @@
 <blockquote>
 <p>比如下图，给训练好的GPT-3输入一个prompt，模型会给我们对应的输出。</p>
 </blockquote>
-<p><img src="/img/translate/17-1.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>
+<p><img src="/img/translate/17-1.gif" srcset="/img/loading.gif" lazyload alt><br>
 <strong>训练</strong>是将模型暴露于大量文本的过程，当然GPT-3已经训练好了。你现在看到的所有基于GPT-3的实验都是用的已经训练好的GPT-3模型。据估计，GPT-3训练使用的算力为355 GPU年，成本460万美元，使用无监督训练，训练数据集高达3000亿个文本tokens。</p>
-<p><img src="/img/translate/17-2.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>
+<p><img src="/img/translate/17-2.gif" srcset="/img/loading.gif" lazyload alt><br>
 举个栗子，下图是使用顶上的这个文本进行生成的三个样例。你可以看到，如何在所有文本上滑动窗口并产生输出。</p>
 <blockquote>
 <p>看下图，作者的意思是，模型在训练时候学习到了训练样例 “Second Law of Robotics: A robot obey the orders given it by human beings.”<br>
@@ -281,23 +281,23 @@
 <li>Example 3 ：prompt 为<code>Second Law of Robotics: A robot</code>，模型会输出预测<code>must</code>。</li>
 </ul>
 </blockquote>
-<p><img src="/img/translate/17-3.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-3.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>我们给模型输入一个样本。将特征传递给模型，并要求它预测下一个单词。模型的输出应该是错的。我们计算其预测的错误并更新模型，以求下次获得更好的预测。然后我们将这一过程重复无数次。</p>
 <blockquote>
 <p>结合下图，可以看到灰色的GPT-3在这里代表一个没训练好的模型，每次给它输入样本的features，让其进行预测获得prediction，预测错误之后，计算其预测的错误值和正确的标签（labels）之间的误差并更新网络。重复该步骤。最后就会获得一个训练好的GPT-3模型。</p>
 </blockquote>
-<p><img src="/img/translate/17-4.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-4.gif" srcset="/img/loading.gif" lazyload alt></p>
 <p>现在我们来详细地介绍一下上边提到的这个需要重复的步骤。GPT-3实际上每次只生成一个token（我们现在默认一个token就是一个单词。）</p>
-<p><img src="/img/translate/17-5.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-5.gif" srcset="/img/loading.gif" lazyload alt></p>
 <p><strong>注意</strong>：本文是对GPT-3工作原理的描述，重点不是讨论其创新点（巨大的模型结构）。该模型的体系结构是基于这篇文章<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1801.10198">Generating Wikipedia by Summarizing Long Sequences</a>的Transformer的decoder模型。</p>
 <p>GPT-3体力巨大，拥有1750亿个参数编码它在训练过程中学到的东西。这些参数用于计算每次运行时要生成的token。</p>
 <p>未经训练的模型参数是随机初始化的，训练过程就是寻找参数值使其产生更好的输出的过程。</p>
-<p><img src="/img/translate/17-6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-6.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>这些参数是模型中数百个矩阵的一部分。预测过程就是是大量的矩阵乘法运算。</p>
 <p>在我<a target="_blank" rel="noopener" href="https://youtube.com/watch?v=mSTCzNgDJy4">YouTube上的AI简介</a>的视频中，我讲了一个仅有一个参数的简单深度学习模型，这个视频可以作为入门，让你能理解这个1750亿参数的巨大模型。</p>
 <p>为了阐明这些参数是如何分布和使用的，我们需要看一下模型的内部结构。</p>
 <p>GPT-3接受token的宽度为2048，我们也可以称之为“上下文窗口”。这意味着它有2048个路径，每个token都要沿着这些路径进行处理。<br>
-<img src="/img/translate/17-7.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>
+<img src="/img/translate/17-7.gif" srcset="/img/loading.gif" lazyload alt><br>
 让我们看着下图紫色箭头的轨迹，看一下系统如何处理<code>robot</code>一词并产生预测<code>A</code>的：</p>
 <p>高级步骤：</p>
 <ol>
@@ -305,32 +305,32 @@
 <li>计算预测值</li>
 <li>将预测结果向量再转换回单词</li>
 </ol>
-<p><img src="/img/translate/17-8.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-8.gif" srcset="/img/loading.gif" lazyload alt></p>
 <p>GPT-3的这些计算发生在96个Transformer的decoder层中。</p>
 <p>看到这么多层了吗？这大概就是“<strong>深度</strong>学习”中的“深度”吧。</p>
 <blockquote>
 <p>也就是说GPT-3是由96个Transformer的decoder组成的。GPT-2最大的型号应该是48层decoder。</p>
 </blockquote>
 <p>每个层都有单独的18亿参数，也就是让GPT-3如此强大到玄幻的地方，计算流程如下：</p>
-<p><img src="/img/translate/17-9.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br>
+<p><img src="/img/translate/17-9.gif" srcset="/img/loading.gif" lazyload alt><br>
 如果想了解decoder的内部构造可以看<a target="_blank" rel="noopener" href="https://lolitasian.blog.csdn.net/article/details/125529598">《图解GPT-2》</a>。</p>
 <p>GPT-3的不同之处是交替使用稠密自注意力层和<a target="_blank" rel="noopener" href="https://lolitasian.blog.csdn.net/article/details/125529598">稀疏的自注意力层</a>。</p>
 <p>这是给定GPT-3输入并获得输出（<code>Okey human</code>）的流程。我们可以看到每个token是如何流经整个模型层的。模型并不关心第一个单词的输出是什么。当我们输入的句子都经过模型层之后，开始输出其预测的第一个单词，这时候模型才会关心输出的token是什么，并将这个输出放回到模型输入中。</p>
-<p><img src="/img/translate/17-10.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-10.png" srcset="/img/loading.gif" lazyload alt></p>
 <p>看一下这个示例：<a target="_blank" rel="noopener" href="https://twitter.com/sharifshameem/status/1284421499915403264">React代码生成</a>。</p>
 <blockquote>
 <p>上边这个代码生成是twitter上的，如果你看不了就直接看我的截图行了。就是这个人说，我让GPT-3生成一个todo list的应用程序，然后它就真的几秒钟之内给我一段功能完整的React写的todo list的代码。<br>
-<img src="/img/translate/17-13.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<img src="/img/translate/17-13.png" srcset="/img/loading.gif" lazyload alt></p>
 </blockquote>
 <p>上边这个代码生成的例子中，我认为是先给模型几个description=&gt;code的示例，然后再给一个prompt描述。然后模型会输出像这些粉色的token一样逐个生成出来。</p>
 <p>我的假设是，基础提示和描述作为额外输入，使用特定的分隔token符将提示内容和描述（结果）拆分开。然后将其喂给模型。</p>
 <blockquote>
 <p>如过大家感兴趣可以去看一下GPT-3的原文，是支持zero-shot、one-shot、few-shot的。这三个x-shot我在这里不解释了，默认大家都懂。上边这两段话就是作者猜测的GPT-3使用few-shot的过程。</p>
 </blockquote>
-<p><img src="/img/translate/17-11.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-11.gif" srcset="/img/loading.gif" lazyload alt></p>
 <p>GPT-3已经很令人惊艳了，如果你能等到GPT-3的微调模型，性能可能会更加惊艳。</p>
 <p>微调会更新模型的权重，使模型更适配于某一领域。</p>
-<p><img src="/img/translate/17-12.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="/img/translate/17-12.gif" srcset="/img/loading.gif" lazyload alt></p>
 
             </div>
             <hr>
@@ -359,6 +359,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/03/21/2%20%E5%8A%A8%E6%BC%AB%E8%AE%B0%E5%BD%95/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">我的动漫记录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
