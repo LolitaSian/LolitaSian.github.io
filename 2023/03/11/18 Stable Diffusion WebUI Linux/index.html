@@ -28,8 +28,9 @@
 <meta property="og:image" content="http://yoursite.com/img/webui/18-3.image">
 <meta property="og:image" content="http://yoursite.com/img/webui/18-4.image">
 <meta property="og:image" content="http://yoursite.com/img/webui/18-5.image">
+<meta property="og:image" content="http://yoursite.com/img/webui/18-6.image">
 <meta property="article:published_time" content="2023-03-11T03:26:00.000Z">
-<meta property="article:modified_time" content="2023-03-21T14:14:47.939Z">
+<meta property="article:modified_time" content="2023-03-21T14:46:42.382Z">
 <meta property="article:author" content="Sian">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="Diffusion Model">
@@ -192,7 +193,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.6k 字
+      3.1k 字
     </span>
   
 
@@ -201,7 +202,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      23 分钟
+      26 分钟
     </span>
   
 
@@ -285,10 +286,34 @@
 <p><code>bash webui.sh</code></p>
 <p><img src="/img/webui/18-4.image" srcset="/img/loading.gif" lazyload alt></p>
 <p><strong>出现URL就是成功！</strong> 点击链接用浏览器打开。</p>
-<hr>
 <h1 id="开始画图吧"><a class="markdownIt-Anchor" href="#开始画图吧"></a> 开始画图吧！</h1>
 <p>Give it a try yourself！</p>
 <p><img src="/img/webui/18-5.image" srcset="/img/loading.gif" lazyload alt></p>
+<h1 id="controlnet"><a class="markdownIt-Anchor" href="#controlnet"></a> ControlNet</h1>
+<ol>
+<li>从<a target="_blank" rel="noopener" href="https://github.com/Mikubill/sd-webui-controlnet">WebUI extension for ControlNet</a>下载源码：</li>
+</ol>
+<p><img src="/img/webui/18-6.image" srcset="/img/loading.gif" lazyload alt></p>
+<ol start="2">
+<li>
+<p>把你下载的源码放到<code>stable-diffusion-webui/extensions/</code>目录。</p>
+</li>
+<li>
+<p>下载模型：</p>
+<p><a target="_blank" rel="noopener" href="https://huggingface.co/lllyasviel/ControlNet/tree/main/models">lllyasviel/ControlNet at main (huggingface.co)</a></p>
+<p><a target="_blank" rel="noopener" href="https://huggingface.co/webui/ControlNet-modules-safetensors">webui/ControlNet-modules-safetensors · Hugging Face</a></p>
+<p><a target="_blank" rel="noopener" href="https://huggingface.co/kohya-ss/ControlNet-diff-modules/tree/main">kohya-ss/ControlNet-diff-modules at main (huggingface.co)</a></p>
+<p>从上边任意一个地址里下载模型，放到以下任意一个目录里：</p>
+<p><code>stable-diffusion-webui/models/ControlNet</code></p>
+<p><code>stable-diffusion-webui/extensions/sd-webui-controlnet-main/models</code></p>
+</li>
+<li>
+<p>重启WebUI，开始使用</p>
+</li>
+</ol>
+<h1 id="lora"><a class="markdownIt-Anchor" href="#lora"></a> Lora</h1>
+<p>使用方法和ControlNet一样，下载地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kohya-ss/sd-webui-additional-networks">https://github.com/kohya-ss/sd-webui-additional-networks</a></p>
 <h1 id="附录"><a class="markdownIt-Anchor" href="#附录"></a> 附录</h1>
 <ol>
 <li>Stable Diffusion Webui：<a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111/stable-diffusion-webui: Stable Diffusion web UI (github.com)</a></li>
