@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#DDDFE2">
+  <meta name="author" content="Sian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="作者博客：@Jay Alammar 原文链接：The Illustrated BERT, ELMo, and co. (How NLP Cracked Transfer Learning)  2018年是NLP模型发展的转折点。我们不断探索单词和句子的表示方法，以求能最好地捕捉其中潜在的语义和关系。此外，NLP领域已经提出了一些功能强大的组件式模型，你可以免费下载，并在自己的模型和pipeline">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图解BERT、ELMo（NLP中的迁移学习）| The Illustrated BERT, ELMo, and co.">
+<meta property="og:url" content="http://yoursite.com/2022/07/17/20%20%E5%9B%BE%E8%A7%A3BERT/index.html">
+<meta property="og:site_name" content="Sian&#39;s Blog">
+<meta property="og:description" content="作者博客：@Jay Alammar 原文链接：The Illustrated BERT, ELMo, and co. (How NLP Cracked Transfer Learning)  2018年是NLP模型发展的转折点。我们不断探索单词和句子的表示方法，以求能最好地捕捉其中潜在的语义和关系。此外，NLP领域已经提出了一些功能强大的组件式模型，你可以免费下载，并在自己的模型和pipeline">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-1.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/71d14eebe00f4f96ac221b16030bf53b~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-2.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-3.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-4.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-5.png">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c55203d06c5c4420a709afe41473805f~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-6.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-7.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-8.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-9.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-10.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-11.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/166398191540498294211421ecf581f7~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c5f2377fdd604d7a9aa94417db03624b~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-14.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c183106858804a1ea9a2e3a56db200cd~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-15.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-16.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-17.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-18.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-19.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-20.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-21.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-22.png">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/df4d8b3514d04947a8ab6375646d1181~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-23.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/280d9f87f9074b1baad0deb0f23fc8ae~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b787049637a48c6a0b50172bacc1ac4~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-24.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-25.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-26.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/bert/19-27.png">
+<meta property="article:published_time" content="2022-07-17T03:26:00.000Z">
+<meta property="article:modified_time" content="2023-05-04T15:28:43.794Z">
+<meta property="article:author" content="Sian">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/img/translate/bert/19-1.png">
+  
+  
+  <title>图解BERT、ELMo（NLP中的迁移学习）| The Illustrated BERT, ELMo, and co. - Sian&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sian&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="图解BERT、ELMo（NLP中的迁移学习）| The Illustrated BERT, ELMo, and co.">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-17 11:26" pubdate>
+        2022年7月17日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      57 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图解BERT、ELMo（NLP中的迁移学习）| The Illustrated BERT, ELMo, and co.</h1>
+            
+            <div class="markdown-body">
+              <p>作者博客：<a target="_blank" rel="noopener" href="http://jalammar.github.io/">@Jay Alammar</a></p>
+<p>原文链接：<a target="_blank" rel="noopener" href="http://jalammar.github.io/illustrated-bert/">The Illustrated BERT, ELMo, and co. (How NLP Cracked Transfer Learning)</a></p>
+<hr>
+<p>2018年是NLP模型发展的转折点。我们不断探索单词和句子的表示方法，以求能最好地捕捉其中潜在的语义和关系。此外，NLP领域已经提出了一些功能强大的组件式模型，你可以免费下载，并在自己的模型和pipeline中使用它们（这被称为NLP领域的ImageNet时刻，类似的发展在几年前，计算机视觉领域的机器学习也是这样加速发展起来的）。</p>
+<blockquote>
+<p><strong>我来解释一下：</strong></p>
+<p>在CV（Computer Vision）领域，预训练+微调已经应用很久了。他们有在ImageNet上训练好的模型可以直接拿去用。但是在NLP（Natural Language Processing）领域并没有像ImageNet那样大的带标签的数据集，因此NLP领域迟迟没有大型预训模型，还是停留在比较低层次的研究上。</p>
+<p>GPT的出现让研究人员看到了曙光，我们使用无标签数据也能做出大模型用于微调。从原来的静态词向量到Transformer的动态词向量，再到使用无标签数据预训练模型并用于微调，简直是开创性的工作。同年又涌现出了BERT。所以那一年真的是开辟了NLP领域工作的新时代。</p>
+<p>在后边本文的作者会说“BERT被认为是NLP新时代的开始”，我不是很同意这个说法，我认为GPT是新时代的开始。</p>
+</blockquote>
+<p><img src="/img/translate/bert/19-1.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>ULM-FiT和Cookie Monster没关系，但我一时半会儿没想到别的角色表示…….</p>
+<blockquote>
+<p>Cookie Monster是芝麻街里边一个吃饼干的蓝色小怪兽。BERT是芝麻街里另一个黄色的角色。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/71d14eebe00f4f96ac221b16030bf53b~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+</blockquote>
+<p>在这一发展过程中，最新的里程碑工作之一是BERT。<s>BERT被认为标志着NLP新时代的开始</s> 。BERT模型在自然语言处理任务方面打破了多项记录。<br>
+BERT论文发布不久之后代码就开源了，还提供了已经在大型数据集上预训练好的模型可以直接下载使用。<br>
+这是一个重大的发展，BERT模型可以作为一个组件，任何人都可以借助它建立一个NLP模型， 从而节省了从头开始训练语言处理模型所需的时间、精力、知识和资源。</p>
+<p><img src="/img/translate/bert/19-2.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>使用BERT的两个步骤：下载在步骤1中已经在无标签数据上预训练好的模型，只需要考虑步骤2的的微调。</p>
+<p>BERT 是建立在近期NLP领域中涌现的许多聪明想法之上的，包括但不限于<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1511.01432">半监督学习</a>、<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.05365">ELMo</a>、<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1801.06146">ULMFiT</a>、<a target="_blank" rel="noopener" href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">GPT</a> 和 Transformer。</p>
+<p>为了正确理解BERT是什么，我们需要了解许多概念。<br>
+在了解模型本身所涉及的概念之前，让我们先看看BERT的使用方法。</p>
+<h2 id="举个例子-句子分类"><a class="markdownIt-Anchor" href="#举个例子-句子分类"></a> 举个例子 ：句子分类</h2>
+<p>使用BERT最直接的方法是使用它对一段文本进行分类。这个模型看起来是这样的：</p>
+<p><img src="/img/translate/bert/19-3.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>为了训练一个基于BERT的分类模型，你只要需要训练分类器（Classifier），BERT模型仅需要微小的改动，这样的训练过程被称为微调，微调起源于半监督学习和ULMFiT。</p>
+<p>但是对于不熟悉这个话题的人来说，既然我们谈论的是分类器，那么我们就进入了机器学习的监督学习领域。这意味着我们需要一个有标记的数据集来训练这样的模型。看看下边的例子，一个垃圾邮件分类器的带标签的数据集，有两部分：一个电子邮件消息列表和一个标签（标签标记每个邮件为“垃圾邮件”或“不是垃圾邮件”）。</p>
+<p><img src="/img/translate/bert/19-4.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>BERT其他用法比如：</p>
+<p>……</p>
+<blockquote>
+<p>BERT能做的事情有很多，现在几乎各个子任务都能看到BERT及其变体。作者举了几个例子，比较局限，毕竟是18年的文章了。所以我就把几个例子忽略了。</p>
+</blockquote>
+<h2 id="模型结构"><a class="markdownIt-Anchor" href="#模型结构"></a> 模型结构</h2>
+<p>现在，你已经知道了BERT如何使用的一些例子，让我们仔细看看它是如何工作的。</p>
+<p><img src="/img/translate/bert/19-5.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>BERT论文中提出了两个尺寸的BERT模：</p>
+<ul>
+<li>BERT-base：和GPT一样大，因为要和GPT比较性能</li>
+<li>BERT-large：一个大得离谱的模型，论文中的SOTA就是这个模型实现的。</li>
+</ul>
+<blockquote>
+<ul>
+<li>看一下没被紫色标记的那句话。我看论文的时候就觉得这句话写的贱嗖嗖的，指名道姓喊话GPT。</li>
+</ul>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c55203d06c5c4420a709afe41473805f~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<ul>
+<li>对于第二点，在当年来看这个模型确实大的离谱，不过身处2022年的我们可以知道，BERT已经算是普通实验室可以微调的良心小模型了。</li>
+</ul>
+</blockquote>
+<p>BERT基本上是用<strong>Transformer</strong>的Encoder组件堆起来的。</p>
+<p>是时候向你们介绍我之前写的《图解Transformer》了，这篇文章介绍了Transformer模型。想要了解我们接下来要介绍的东西，一定要先了解Transformer。</p>
+<p><img src="/img/translate/bert/19-6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>两种尺寸的BERT模型都有大量的Encoder组件（论文里叫Encoder组件为Transformer block）。</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>Encoder层数</th>
+<th>隐藏单元大小</th>
+<th>多头注意力数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transformer</td>
+<td>6</td>
+<td>512</td>
+<td>8</td>
+</tr>
+<tr>
+<td>BERT-base</td>
+<td>12</td>
+<td>768</td>
+<td>12</td>
+</tr>
+<tr>
+<td>BERT-large</td>
+<td>24</td>
+<td>1024</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<h3 id="模型输入"><a class="markdownIt-Anchor" href="#模型输入"></a> 模型输入</h3>
+<p><img src="/img/translate/bert/19-7.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>第一个输入token是默认提供的一个特殊的<code>[CLS]</code>token，原因后面再说明。CLS在这里代表分类。</p>
+<blockquote>
+<p>就是你不管输入序列是什么东西，模型都会给你加上一个<code>[CLS]</code>做为开头第一个token。</p>
+</blockquote>
+<p>和Transformer的普通的encoder一样，BERT将一个单词序列作为输入，该序列在组件堆栈中不断向上流动。每一层都施加自注意力，并通过前馈网络传递其结果，然后将其传递给下一个encoder组件。</p>
+<p><img src="/img/translate/bert/19-8.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>就架构而言，到目前为止，它和Transformer是相同的（除了大小，当然大小是我们可以自己设置的超参数）。在输出部分，我们才能开始看到不同的地方。</p>
+<h3 id="模型输出"><a class="markdownIt-Anchor" href="#模型输出"></a> 模型输出</h3>
+<p>每个位置输出一个大小为hidden_size（BERT-base为768）的向量。对于上面说的句子分类那个例子，我们只需要关注第一个位置的输出（就是我们之前传入特殊<code>[CLS]</code>token的那个位置）。</p>
+<p><img src="/img/translate/bert/19-9.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>这个向量现在可以用作我们分类器的输入。论文中仅使用单层神经网络作为分类器就取得了很好的效果。</p>
+<p><img src="/img/translate/bert/19-10.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>如果你有更多的标签（比如你是一个电子邮件服务提供者，需要将电子邮件标记为“垃圾邮件”、“非垃圾邮件”、“社交”和“推广”），那只需调整分类器的网络结构，使其可以做多分类即可。</p>
+<h2 id="与卷积网络类似"><a class="markdownIt-Anchor" href="#与卷积网络类似"></a> 与卷积网络类似</h2>
+<p>对于那些有计算机视觉基础的人来说，这种向量传递应该会让人联想到一些网络（例如VGG）的卷积部分和网络后边的全连接分类部分。</p>
+<p><img src="/img/translate/bert/19-11.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="embedding新纪元"><a class="markdownIt-Anchor" href="#embedding新纪元"></a> Embedding新纪元</h2>
+<p>新的发展带来了文字编码方式的转变。词嵌入一直是NLP模型处理语言的主力军，像Word2Vec和Glove这样的方法已经获得了广泛应用。在说新变化之前我们先来回顾一下之前的词嵌入编码方式。</p>
+<h3 id="简要回顾词嵌入word-embedding"><a class="markdownIt-Anchor" href="#简要回顾词嵌入word-embedding"></a> 简要回顾词嵌入Word Embedding</h3>
+<p>如果想用机器学习模型来处理单词的话，你需要先将单词转化为模型能够计算的数值表示。Word2Vec表明我们可以使用向量表示单词，并捕捉其语义和含义关系，以及句法和语法关系。</p>
+<ul>
+<li>语义和含义关系例如：能够分辨单词是相似的还是相反的。能够区分像“斯德哥尔摩”和“瑞典”与“开罗”和“埃及”之间的关系是相同。</li>
+<li>句法和语法关系例如：“had”和“has”之间的关系与“was”和“is”之间的关系相同。</li>
+</ul>
+<p>人们很快意识到，我们可以直接在大量文本数据上预训练好embedding，而不是对每个模型的小数据都进行embedding训练。之后就可以直接下载通过Word2Vec或GloVe预训练好的单词及其embedding列表。下图单词“stick”的GloVe的词嵌入示例（embedding向量大小为200）</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/166398191540498294211421ecf581f7~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>单词“stick”的GloVe词嵌入是由200个浮点数组成的向量（四舍五入到两位小数）。</p>
+<p>因为这些向量都很长，画那么多格子不切实际，之后我会用这样少数几个格子来表示词嵌入向量。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c5f2377fdd604d7a9aa94417db03624b~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="elmo-上下文语境很重要"><a class="markdownIt-Anchor" href="#elmo-上下文语境很重要"></a> ELMo: 上下文语境很重要</h3>
+<p>如果我们使用GloVe的那些词嵌入，那么不管上下文是什么，单词“stick”都将由这个向量表示。<strong>许多自然语言处理研究人员</strong>说，“（尔康手）等等！‘stick’有多种含义！具体意思取决于它的使用位置。为什么我们不根据上下文语境进行embedding呢？这样既能捕捉该语境中的含义，又捕捉其他语境信息。”<br>
+于是，语境化的词嵌入就诞生了。</p>
+<blockquote>
+<p><strong>许多自然语言处理研究人员</strong> 指的是</p>
+<ol>
+<li>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.00108">Semi-supervised sequence tagging with bidirectional language models</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1708.00107">Learned in Translation: Contextualized Word Vectors</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.05365">Deep contextualized word representations</a></p>
+</li>
+</ol>
+</blockquote>
+<p><img src="/img/translate/bert/19-14.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c183106858804a1ea9a2e3a56db200cd~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>语境化词嵌入可以根据词语在句子语境中的含义赋予词语不同的embedding。</p>
+<p>ELMo没有对每个单词使用固定的词嵌入，而是在为每个单词计算embedding之前考虑整个句子。ELMo模型使用的是特定任务上训练的bi-LSTM进行词嵌入。</p>
+<p><img src="/img/translate/bert/19-15.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>ELMo为NLP的预训练任务迈出了重要一步。ELMo在大型语料库上进行预训练，在数据集语言的大规模数据集上进行训练，然后我们可以将其一个组件放到其他模型上处理语言。</p>
+<p><strong>ELMo的秘密是什么？</strong></p>
+<p>ELMo是通过预测任务进行语言理解的，这项任务称为语言建模。这样非常方便，因为这样训练不需要有标签数据，而我们有大量的文本数据可以让模型从中学习。</p>
+<p><img src="/img/translate/bert/19-16.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>假设用<code>Let’s stick to</code>作为输入，预测下一个最可能的单词。<br>
+当在数据集上训练时，模型开始学习语言模式。在这个例子中，它不太可能准确地猜出下一个单词（<code>improvisation</code>）。 举个现实一点的例子，比如<code>hang</code>之类的单词，它大概率输出<code>out</code>之类的词，反正<code>out</code>概率肯定比<code>camera</code>更高。</p>
+<p>上图我们可以看到展开的 LSTM，每个步骤的隐藏状态从 ELMo 的后脑勺向量逐步传播，一直到最顶上传给一个FFNN。 模型训练完以后，这些向量会在计算词嵌入的过程中派上用场。</p>
+<p>看下图，ELMo 实际上不只是LSTM，而是训练了一个bi-LSTM，这样它的语言模型不仅能看到下一个词，也能看到上一个词。</p>
+<p><img src="/img/translate/bert/19-17.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>推荐一个<a target="_blank" rel="noopener" href="https://www.slideshare.net/shuntaroy/a-review-of-deep-contextualized-word-representations-peters-2018">相关PPT</a>。</p>
+<p>ELMo通过以某种方式将<strong>隐藏状态</strong>和<strong>初始embedding</strong>组合在一起，从而进行语境化词嵌入。</p>
+<p><img src="/img/translate/bert/19-18.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="ulm-fit将迁移学习引入nlp"><a class="markdownIt-Anchor" href="#ulm-fit将迁移学习引入nlp"></a> ULM-FiT：将迁移学习引入NLP</h3>
+<p>ULM-FiT引入了一些方法，可以有效地利用模型在预训练阶段学到的很多东西——不仅仅是embedding，也不仅仅是带上下文信息的embedding。ULM-FiT引入了一个语言模型和一个可以有效地对该语言模型进行微调的方法，使得该模型能适应各种任务。</p>
+<p>NLP终于有了一种像CV领域一样的迁移学习方法。</p>
+<h3 id="transformer超越lstms的存在"><a class="markdownIt-Anchor" href="#transformer超越lstms的存在"></a> Transformer：超越LSTMs的存在</h3>
+<p>Transformer诞生之后在机器翻译等任务上取得了一些成果，让NLP领域的一些人认为它是LSTM的替代品。但是Transformer相较于LSTM，能更好地处理长期依赖关系。</p>
+<p>Transformer的encoder-decoder结构使其非常适合机器翻译。但是如何用它来进行句子分类呢? 你如何使用已经预训练好的语言模型对其他下游任务进行微调呢？（下游任务是那些使用预训练模型或组件的监督学习任务）</p>
+<h3 id="gpt使用transformer的decoder进行预训练的语言模型"><a class="markdownIt-Anchor" href="#gpt使用transformer的decoder进行预训练的语言模型"></a> GPT：使用Transformer的Decoder进行预训练的语言模型</h3>
+<p>事实证明，我们不需要整个Transformer进行迁移学习，或者为NLP任务创建预训练语言模型。我们可以只使用Transformer的decoder。Decoder是一个不错的选择，因为它采用的是masked attention，可以掩盖当前步骤之后的tokens，所以它天然适合语言建模。</p>
+<p><img src="/img/translate/bert/19-19.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>GPT 由12个Transformer的decoder组成。因为模型没有encoder，因此这些decoder和Transformer原始的decoder相比是没有encoder-decoder注意力子层的，但是会保留masked self-attention子层。</p>
+<p>使用这种结构，我们可以继续在语言建模任务上训练模型：使用大量无标签数据集预测下一个单词。 只需将 7000本书的文本扔给它，让它学习！<br>
+书籍非常适合语言建模任务，因为两个词之间被大量文本分隔，模型可以学习到如何关联一些相关信息。你使用推特或文章进行训练就不会有这么好的效果。</p>
+<p><img src="/img/translate/bert/19-20.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>GPT现在已经准备好接受训练了，在一个7000本书组成的数据集上进行预测任务训练。</p>
+<h2 id="迁移到下游任务"><a class="markdownIt-Anchor" href="#迁移到下游任务"></a> 迁移到下游任务</h2>
+<p>现在GPT已经经过了预训练，我们可以开始将它用于下游任务。</p>
+<p>让我们先来看一下句子分类（把电子邮件分类为“spam”或“not spam”）：</p>
+<p><img src="/img/translate/bert/19-21.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><strong>GPT怎么进行句子分类？</strong></p>
+<p>GPT论文中列出了一些方案：怎么转换输入以适应不同类型的任务。<br>
+下面这张图片展示了执行不同任务的模型结构和输入转换格式。</p>
+<p><img src="/img/translate/bert/19-22.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>厉不厉害！</p>
+<h2 id="bert不用decoder了我们来用encoder"><a class="markdownIt-Anchor" href="#bert不用decoder了我们来用encoder"></a> BERT：不用Decoder了，我们来用encoder</h2>
+<p>OpenAI的Transformer（GPT）为我们提供了一个基于transformer的可微调的预训练模型。但是在从LSTMs到Transformer的转变过程中，有些东西消失了。<br>
+ELMo的语言模型是双向的，但是GPT只训练正向语言模型。我们能否构建一个基于Transformer的模型，它的语言模型既可以向前看，也可以向后看（用技术术语来说——“同时受左右两边上下文的约束”）?</p>
+<blockquote>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/df4d8b3514d04947a8ab6375646d1181~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>左边是Ernie，右边是BERT。</p>
+<p>下边这句话原文是“Hold my beer”, said R-rated BERT.</p>
+<p>拿好我的啤酒，我要开始装逼了。引申为 看我的吧。</p>
+</blockquote>
+<p><font color="#F59D47"><strong>BERT：“看我的！”</strong></font></p>
+<h3 id="掩码语言模型-masked-language-model"><a class="markdownIt-Anchor" href="#掩码语言模型-masked-language-model"></a> 掩码语言模型 Masked Language Model</h3>
+<p><font color="#F59D47"><strong>BERT：“我们将使用Transformer的encoder！”</strong></font></p>
+<p><font color="#F27A5A"><strong>Ernie：“哦我的老天鹅，你疯了吧。是个人就知道双向制约在多层语境中能让文本间接看到自己的信息。”</strong></font></p>
+<p><font color="#F59D47"><strong>BERT自信地说：“我们将使用mask！”</strong></font></p>
+<p><img src="/img/translate/bert/19-23.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>BERT的巧妙之处在于，BERT在语言建模任务中随机mask掉输入序列中15%的单词，要求模型预测缺失的单词。</p>
+<p>找到正确的方法去训练Transformer的encoder是一个难点。BERT通过采用早期文献中的“掩码语言模型”（masked language modelnMLM）来解决这个问题。</p>
+<p>BERT不是单纯的mask掉15%的输入，为了便于模型微调，BERT还在其中混合了其他的东西。比如有时它会随机用另一个单词替换一个单词，要求模型预测该位置的正确单词。</p>
+<blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/280d9f87f9074b1baad0deb0f23fc8ae~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>就是从输入中随机抽15%的词。将其中80%mask掉，10%换为其他的词，10%不做任何处理。</p>
+</blockquote>
+<h3 id="两个句子的任务"><a class="markdownIt-Anchor" href="#两个句子的任务"></a> 两个句子的任务</h3>
+<p>如果你回想一下GPT对不同任务的输入进行转换的时候，一些任务需要模型对两个句子做一些提示。（例如，给定两个输入，一个是维基百科词条作，另一个是关于该词条的问题，需要提示“我们能回答这个问题吗？”）。</p>
+<p>为了使BERT更好地处理多个句子之间的关系，预训练过程中还有一个额外的任务。给定两个句子AB，判断B是否是A的下一句。</p>
+<blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b787049637a48c6a0b50172bacc1ac4~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>训练数据中50%的B是A的下一句，另外50%是随机抽取的句子。</p>
+</blockquote>
+<p><img src="/img/translate/bert/19-24.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>BERT预训练的第二个任务是两个句子的分类任务。在上图中，token被简化了，BERT实际使用的是WordPieces分词作为token，而不是一个单词作为一个token。WordPieces是一些单词会被分解成更小的部分。</p>
+<h3 id="task-specific-models"><a class="markdownIt-Anchor" href="#task-specific-models"></a> Task specific-Models</h3>
+<p>BERT的论文展示了在不同任务中使用BERT的多种方法。</p>
+<p><img src="/img/translate/bert/19-25.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="bert-的特征抽取"><a class="markdownIt-Anchor" href="#bert-的特征抽取"></a> BERT 的特征抽取</h3>
+<p>微调并不是使用BERT的唯一方法。和ELMo一样，你可以用预训练好的BERT做动态词嵌入，然后把学到的嵌入信息提供给你的模型。论文中表示，在命名实体识别等任务上，用BERT提供动态词嵌入和微调BERT的效果差不多。</p>
+<p><img src="/img/translate/bert/19-26.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>哪个向量最适合作为上下文嵌入？ 我觉得这取决于任务。论文原文考虑了六种选择（与获得 96.4 分的微调模型相比）：</p>
+<p><img src="/img/translate/bert/19-27.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="带bert出去炫"><a class="markdownIt-Anchor" href="#带bert出去炫"></a> 带BERT出去炫</h2>
+<p>试用BERT的最佳方法是通过<a target="_blank" rel="noopener" href="https://colab.research.google.com/github/tensorflow/tpu/blob/master/tools/colab/bert_finetuning_with_cloud_tpus.ipynb">谷歌Colab上托管的云TPUs进行BERT微调</a>。如果你以前没用过云TPU，那么这也是一个尝试的的好起点。BERT代码可以在CPU、TPU、GPU上工作。</p>
+<p>第二步当然是看看BERT的源码：</p>
+<ul>
+<li>
+<p>模型在<code>modeling.py</code> （<code>class BertModel</code>）中，和普通的Transformer编码器几乎相同。</p>
+</li>
+<li>
+<p><code>run_classifier.py</code>是微调过程的一个例子。它还为监督模型构建了分类层。如果你想构造自己的分类器，可以参考其中的<code>create_model()</code>方法。</p>
+</li>
+<li>
+<p>有一些预先训练的模型可以直接下载使用。这些模型涵盖BERT-base、BERT-large，涵盖英语、汉语，以及wikipedia上训练的102种语言的多语言模型。</p>
+</li>
+<li>
+<p>BERT不是把单词看做token，而是视为WordPieces。 <code>tokenization.py</code> 是分词器，能把你的单词转化为适合BERT的WordPieces。</p>
+</li>
+</ul>
+<p>你也可以看一下Pytorch版本的BERT。 <a target="_blank" rel="noopener" href="https://github.com/google-research/bert">AllenNLP</a> 允许任何模型使用BERT嵌入。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+                    
+                      <a class="hover-with-bg" href="/tags/NLP/">NLP</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，文章禁止转载！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/11/18%20Stable%20Diffusion%20WebUI%20Linux/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux上如何使用Stable Diffusion WebUI</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/29/21%20%E5%9B%BE%E8%A7%A3GPT-2/">
+                        <span class="hidden-mobile">图解GPT-2 | The Illustrated GPT-2 (Visualizing Transformer Language Models)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

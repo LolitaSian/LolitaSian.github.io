@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#DDDFE2">
+  <meta name="author" content="Sian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="作者博客：@Jay Alammar 原文链接：The Illustrated Transformer – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)  翻译讲究：信、达、雅。要在保障意思准确的情况下传递作者的意图，并且尽量让文本优美。 但是大家对我一个理工科少女的语言要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图解transformer | The Illustrated Transformer">
+<meta property="og:url" content="http://yoursite.com/2022/04/23/19%20%E5%9B%BE%E8%A7%A3Transformer/index.html">
+<meta property="og:site_name" content="Sian&#39;s Blog">
+<meta property="og:description" content="作者博客：@Jay Alammar 原文链接：The Illustrated Transformer – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)  翻译讲究：信、达、雅。要在保障意思准确的情况下传递作者的意图，并且尽量让文本优美。 但是大家对我一个理工科少女的语言要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-1.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-2.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/54a6f80791ac4f3cb0bcfc8f1d79f8d4~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-3.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-4.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-5.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-6.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-7.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-8.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-9.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-10.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-11.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-12.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-13.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-14.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-15.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-16.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-17.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-18.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-19.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-20.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-21.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-22.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-23.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-24.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-25.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-26.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-27.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-28.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-29.gif">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-30.gif">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-31.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-32.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-33.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-34.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-35.png">
+<meta property="og:image" content="http://yoursite.com/img/translate/transformer/18-36.png">
+<meta property="article:published_time" content="2022-04-23T03:26:00.000Z">
+<meta property="article:modified_time" content="2023-05-04T15:02:28.860Z">
+<meta property="article:author" content="Sian">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/img/translate/transformer/18-1.png">
+  
+  
+  <title>图解transformer | The Illustrated Transformer - Sian&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sian&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="图解transformer | The Illustrated Transformer">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-23 11:26" pubdate>
+        2022年4月23日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      9.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      77 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图解transformer | The Illustrated Transformer</h1>
+            
+            <div class="markdown-body">
+              <p>作者博客：<a target="_blank" rel="noopener" href="http://jalammar.github.io/">@Jay Alammar</a></p>
+<p>原文链接：<a target="_blank" rel="noopener" href="http://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)</a></p>
+<hr>
+<p>翻译讲究：信、达、雅。要在保障意思准确的情况下传递作者的意图，并且尽量让文本优美。</p>
+<p>但是大家对我一个理工科少女的语言要求不要太高，本文只能保证在尽量通顺的情况下还原原文。</p>
+<p><strong>注意本文的组成部分：翻译 + 我的注释。</strong></p>
+<p>添加注释是因为在阅读的过程中，我感觉有的地方可能表述的并不是特别详细，对于一些真正的小白，可能不太好理解，所以我做了一点注释。</p>
+<hr>
+<p>在<a target="_blank" rel="noopener" href="https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">之前的文章</a>我们讲了现代神经网络常用的一种方法——注意力机制（Attention）。</p>
+<p>本文我们继续介绍一下Transformer——用注意力机制来提高模型训练速度的模型。<br>
+Transformer在某些特定任务上性能比谷歌的机器翻译模型更为优异，其优点在于并行化计算。并且谷歌云也推荐使用transformer作为参考模型来运行他们的TPU云服务。所以让我们来把它拆解开看一下它是如何发挥作用的。</p>
+<ul>
+<li>
+<p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Attention is All You Need</a>.</p>
+</li>
+<li>
+<p>官方代码（TensorFlow）：<a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensor2tensor">GitHub - tensorflow/tensor2tensor: Library of deep learning models and datasets designed to make deep learning more accessible and accelerate ML research.</a></p>
+</li>
+<li>
+<p>哈佛大学NLP组代码（Pytorch）：<a target="_blank" rel="noopener" href="http://nlp.seas.harvard.edu/2018/04/03/attention.html">The Annotated Transformer (harvard.edu)</a></p>
+</li>
+</ul>
+<p>在本文中，我们会逐个概念进行介绍，希望能帮助没接触过Transformer的人能够更容易的理解。</p>
+<h2 id="从高层面看"><a class="markdownIt-Anchor" href="#从高层面看"></a> 从高层面看</h2>
+<p>我们先把整个Transformer模型看作是一个黑盒。在机器翻译中，它可以把句子从一种语言翻译成另一种语言。</p>
+<p><img src="/img/translate/transformer/18-1.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>打开这个黑盒，我们首先可以看到一个编码器（encoder）模块和一个解码器（decoder）模块，以及二者之间存在某种关联。</p>
+<p><img src="/img/translate/transformer/18-2.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>作者原文说的是“Popping open that Optimus Prime goodness”，也就是“噢我的老天鹅让我们打开这个擎天柱看一下。”</p>
+<p>擎天柱：？？？你在叫我吗？</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/54a6f80791ac4f3cb0bcfc8f1d79f8d4~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>我之前看过一个大佬解释说transformer其实取的是“变压器”这个意象，但是因为变形金刚这个印象好像更为广为人知一点，所以人们提到transformen一般想到的都是变形金刚，作者在这里就直接默认是擎天柱了。<br>
+这倒我想起来微软和NVIDIA还合作了一个威震天（Megatron Turing—NLG），感兴趣的可以自己去了解一下。</p>
+</blockquote>
+<p>再往里看一下，编码器模块是6个编码器组件堆叠在一起，同样解码器模块也是6个解码器组件堆。（为什么选6个呢？没有什么原因，论文原文就是这么写的，你也可以换成别的层数）</p>
+<blockquote>
+<p>在这里这个encoder和decoder中的基础组件个数属于超参数，可以自己尝试设置不同的值。这是Transformer中第一个可调参数。</p>
+</blockquote>
+<p><img src="/img/translate/transformer/18-3.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>6个编码器组件的结构是相同的（但是他们之间的权重是不共享的），每个编码器都可以分为2个子层。</p>
+<p><img src="/img/translate/transformer/18-4.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>编码器的输入首先会进入一个自注意力层，这个注意力层的作用是：当要编码某个特定的词汇的时候，它会帮助编码器关注句子中的其他词汇。这个之后会进行详细讲解。</p>
+<p>自注意力层的输出会传递给一个前馈神经网络，每个编码器组件都是在<strong>相同的位置</strong>使用<strong>结构相同</strong>的前馈神经网络。</p>
+<blockquote>
+<p>这里要注意一点，在前面我们已经说了组件之间的参数是不共享的。这里的相同仅限于结构相同，它们的参数是不同的！！！</p>
+</blockquote>
+<p>解码器组件也含有前面编码器中提到的两个层，区别在于这两个层之间还夹了一个注意力层，多出来的这个自注意力层的作用是让解码器能够注意到输入句子中相关的部分（和seq2seq中的attention一样的作用）。</p>
+<p><img src="/img/translate/transformer/18-5.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="图解张量"><a class="markdownIt-Anchor" href="#图解张量"></a> 图解张量</h2>
+<p>现在我们要开始了解整个模型了。</p>
+<p>在一个<strong>已经训练好的</strong>Transformer模型中，输入是怎么变为输出的呢？</p>
+<p>首先我们要知道各种各样的张量或者向量是如何在这些组件之间变化的。</p>
+<p>与其他的NLP项目一样，我们首先需要把输入的每个单词通过词嵌入（embedding）转化为对应的向量。</p>
+<p><img src="/img/translate/transformer/18-6.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>在原文中每个词的嵌入向量是512维，这里为了便于理解，就用这几个格子进行表示。</p>
+<blockquote>
+<p>虽然这里只画了4个格子，但是我们用4个格子表示512的维度，不是说用4个格子表示四维。</p>
+</blockquote>
+<p>所有编码器接收一组向量作为输入，论文中的输入向量的维度是512。最底下的那个编码器接收的是嵌入向量，之后的编码器接收的是前一个编码器的输出。</p>
+<p>向量长度这个超参数是我们可以设置的，一般来说是我们训练集中最长的那个句子的长度。</p>
+<blockquote>
+<p>这是Transformer中第二个超参数，我们可以自行设置。到这里严格意义上讲，Transformer的超参数都出来了。</p>
+<p>“这个简单的设计影响到后面一系列的网络，BERT啊、GPT啊其实只有两个参数可以调的。”——李沐</p>
+</blockquote>
+<p>当我们的输入序列经过词嵌入之后得到的向量会依次通过编码器组件中的两个子层。</p>
+<p><img src="/img/translate/transformer/18-7.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>在这里，我们开始看到Transformer的一个关键属性，即每个位置上的单词在编码器中有各自的流通方向。在自注意力层中，这些路径之间存在依赖关系。 然而，前馈神经网络中没有这些依赖关系，因此各个路径可以在经过前馈神经网络层的时候并行计算。</p>
+<p>接下来我们用一个短句（<code>Thinking Machine</code>）作为例子，看看在编码器的每个子层中发生了什么。</p>
+<h2 id="编码器"><a class="markdownIt-Anchor" href="#编码器"></a> 编码器</h2>
+<p>上边我们已经说了，每个编码器组件接受一组向量作为输入。在其内部，输入向量先通过一个自注意力层，再经过一个前馈神经网络，最后将其将输出给下一个编码器组件。</p>
+<p><img src="/img/translate/transformer/18-8.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>不同位置上的单词都要经过自注意力层的处理，之后都会经过一个结构完全相同的前馈神经网络。</p>
+<h3 id="自注意力"><a class="markdownIt-Anchor" href="#自注意力"></a> 自注意力</h3>
+<p>不要一看“self-attention”就觉得这是个每个人都很很熟悉的词，其实我个人感觉，在看《Attention is all you need》之前我都没有真正理解自注意力机制。现在让我们看一下自注意力机制。</p>
+<p>假设我们要翻译下边这句话：</p>
+<p><code>“The animal didn't cross the street because it was too tired”</code></p>
+<p>这里<code>it</code>指的是什么？是<code>street</code>还是<code>animal</code>？人理解起来很容易，但是用算法处理就不那么容易了。</p>
+<p>当模型处理<code>it</code>这个词的时候，自注意力会让<code>it</code>和<code>animal</code>关联起来。</p>
+<p>当模型编码每个位置上的单词的时候，自注意力的作用就是：看一看输入句子中其他位置的单词，试图寻找一种对当前单词更好的编码方式。</p>
+<p>如果你熟悉RNNs模型，回想一下RNN如何处理当前时间步的隐藏状态：将之前的隐藏状态与当前位置的输入结合起来。<br>
+在Transformer中，自注意力机制也可以将其他相关单词的“理解”融入到我们当前处理的单词中。</p>
+<p><img src="/img/translate/transformer/18-9.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>当我们在最后一个编码器组件中对<code>it</code>进行编码的时候，注意力机制会更关注<code>The animal</code>，并将其融入到<code>it</code>的编码中。</p>
+<p>可以去<a target="_blank" rel="noopener" href="https://colab.research.google.com/github/tensorflow/tensor2tensor/blob/master/tensor2tensor/notebooks/hello_t2t.ipynb">Tensor2Tensor</a> ，自己体验一下上图的可视化。</p>
+<h3 id="细说自注意力机制"><a class="markdownIt-Anchor" href="#细说自注意力机制"></a> 细说自注意力机制</h3>
+<p>先画图解释一下自注意力是怎么算的，之后再看一下实际实现中是怎么用矩阵计算。</p>
+<p><strong>第一步</strong> 对编码器的每个输入向量都计算三个向量，就是对每个输入向量都算一个query、key、value向量。<br>
+怎么算的？<br>
+把输入的词嵌入向量与三个权重矩阵相乘。权重矩阵是模型训练阶段训练出来的。</p>
+<blockquote>
+<p>在同一个编码器组件中，一组输入向量使用相同的权重矩阵，就是所有输入都用一样的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>Q</mi></msup><mi mathvariant="normal">、</mi><msup><mi>W</mi><mi>K</mi></msup><mi mathvariant="normal">、</mi><msup><mi>W</mi><mi>V</mi></msup></mrow><annotation encoding="application/x-tex">W^Q、W^K、W^V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">Q</span></span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">K</span></span></span></span></span></span></span></span><span class="mord cjk_fallback">、</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">V</span></span></span></span></span></span></span></span></span></span></span>）</p>
+</blockquote>
+<p>注意，这三个向量维度是64，比嵌入向量的维度小，嵌入向量、编码器的输入输出维度都是512。这三个向量<strong>不是必须</strong>比编码器输入输出的维数小，这样做主要是为了让多头注意力的计算更稳定。</p>
+<p><img src="/img/translate/transformer/18-10.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">x_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>Q</mi></msup></mrow><annotation encoding="application/x-tex">{W}^{Q}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">Q</span></span></span></span></span></span></span></span></span></span></span></span> 权重矩阵相乘得到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>q</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">{q}_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, 就得到与单词<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">{x}_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 相关的query。<br>
+按这样的方法，最终我们给输入的每一个单词都计算出一个“query”、一个 “key&quot;和一个 “value&quot;。</p>
+<p>什么是 “query”、“key”、“value” 向量？</p>
+<p>这三个向量是计算注意力时的抽象概念，继续往下看注意力计算过程，看完了就懂了。</p>
+<p><strong>第二步</strong> 计算注意力得分。</p>
+<p>假设我们现在在计算输入中第一个单词<code>Thinking</code>。我们需要使用自注意力给输入句子中的每个单词打分，这个分数决定当我们编码某个位置的单词的时候，应该对其他位置上的单词给予多少关注度。</p>
+<p>这个得分是query和key的<strong>点乘积</strong>得出来的。</p>
+<p>举个栗子，我们要算第一个位置的注意力得分的时候就要将第一个单词的query和其他的key依次相乘，在这里就是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>q</mi><mn>1</mn></msub><mo separator="true">⋅</mo><msub><mi>k</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">q_1·k_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>,<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>q</mi><mn>1</mn></msub><mo separator="true">⋅</mo><msub><mi>k</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">q_1·k_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。</p>
+<p><img src="/img/translate/transformer/18-11.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><strong>第三步</strong> 将计算获得的注意力分数除以8。</p>
+<p>为什么选8？是因为key向量的维度是64，取其平方根，这样让梯度计算的时候更稳定。默认是这么设置的，当然也可以用其他值。</p>
+<p><strong>第四步</strong> 除8之后将结果扔进softmax计算，使结果归一化，softmax之后注意力分数相加等于1，并且都是正数。</p>
+<p><img src="/img/translate/transformer/18-12.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>这个softmax之后的注意力分数表示<strong>在计算当前位置的时候，其他单词受到的关注度的大小</strong>。显然在当前位置的单词肯定有一个高分，但是有时候也会注意到与当前单词相关的其他词汇。</p>
+<blockquote>
+<p>这一步中我们会得到一个句子中不同单词对于<code>Thinking</code>的注意力分数。</p>
+</blockquote>
+<p><strong>第五步</strong> 将每个value向量乘以注意力分数。<br>
+这是为了留下我们想要关注的单词的value，并把其他不相关的单词丢掉。</p>
+<p><strong>第六步</strong> 将上一步的结果相加，输出本位置的注意力结果。</p>
+<p>第一个单词的注意力结果就是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">z_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></p>
+<p><img src="/img/translate/transformer/18-13.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>这就是自注意力的计算。计算得到的向量直接传递给前馈神经网络。但是为了处理的更迅速，实际是用矩阵进行计算的。接下来我们看一下怎么用矩阵计算。</p>
+<h3 id="用矩阵计算self-attention"><a class="markdownIt-Anchor" href="#用矩阵计算self-attention"></a> 用矩阵计算self-attention</h3>
+<p>计算Query, Key, Value矩阵。直接把输入的向量打包成一个矩阵<font color="green"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span></span></span></span></font>，再把它乘以训练好的<font color="purple"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>Q</mi></msup></mrow><annotation encoding="application/x-tex">W^Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">Q</span></span></span></span></span></span></span></span></span></span></span></font>、<font color="orange"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>K</mi></msup></mrow><annotation encoding="application/x-tex">W^K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">K</span></span></span></span></span></span></span></span></span></span></span></font>、<font color="lightblue"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>V</mi></msup></mrow><annotation encoding="application/x-tex">W^V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">V</span></span></span></span></span></span></span></span></span></span></span></font>。</p>
+<blockquote>
+<p>X矩阵每一行都代表输入句子中的一个词，整个矩阵代表输入的句子。</p>
+</blockquote>
+<p><img src="/img/translate/transformer/18-14.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span></span></span></span>矩阵中的一行相当于输入句子中的一个单词。<br>
+我们看一下维度的差异：原文中嵌入矩阵的长度为 512 , <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>q</mi><mi mathvariant="normal">、</mi><mi>k</mi><mi mathvariant="normal">、</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">q、k、v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span></span> 矩阵的长度为 64 ；<br>
+在这里我们分别用 4 个格子表示和3个格子表示。</p>
+<p>因为我们现在用矩阵处理，所以可以直接将之前的第二步到第六步压缩到一个公式中一步到位获得最终的注意力结果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Z</mi></mrow><annotation encoding="application/x-tex">Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span></span></span></span>。</p>
+<p><img src="/img/translate/transformer/18-15.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>补充一个有趣的知识。注意力的计算方法不止这一种，常见的有点积注意力、加性注意力等。但是论文中用的是点积注意力。作者的理由是：“简单”。虽然二者难度是差不多的，但是点积注意力计算起来更快，代码写起来更方便。</p>
+</blockquote>
+<h3 id="多头注意力"><a class="markdownIt-Anchor" href="#多头注意力"></a> 多头注意力</h3>
+<p>论文进一步改进了自注意力层，增加了一个机制，也就是多头注意力机制。这样做有两个好处：</p>
+<ol>
+<li>
+<p>它扩展了模型专注于不同位置的能力。</p>
+<p>在上面例子里只计算一个自注意力的的例子中，编码<code>Thinking</code>的时候，虽然最后<font color="pink"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Z</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">Z_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></font>或多或少包含了其他位置单词的信息，但是它实际编码中还是被<code>Thinking</code>单词本身所支配。</p>
+<p>如果我们翻译一个句子，比如<code>The animal didn’t cross the street because it was too tired</code>，我们会想知道“it”指的是哪个词，这时模型的“多头”注意力机制会起到作用。</p>
+<blockquote>
+<p>我个人理解：每个词最终的编码都是主要受该单词本身的影响，虽然关注到其他位置的词，但是它的关注点可能和你想要的点不一样。但是你有多head的时候就好办了，一个词一共才多少种含义，总能有一个关注到我想的方面吧。作者举it这个例子，如果你现在感觉看的有点迷惑没关系，看完这一小节最后那两张多头自注意力的可视化就理解了。</p>
+</blockquote>
+</li>
+<li>
+<p>它给了注意层多个“表示子空间”。</p>
+<p>就是在多头注意力中同时用多个不同的<font color="purple"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>Q</mi></msup></mrow><annotation encoding="application/x-tex">W^Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">Q</span></span></span></span></span></span></span></span></span></span></span></font>、<font color="orange"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>K</mi></msup></mrow><annotation encoding="application/x-tex">W^K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">K</span></span></span></span></span></span></span></span></span></span></span></font>、<font color="lightblue"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>V</mi></msup></mrow><annotation encoding="application/x-tex">W^V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">V</span></span></span></span></span></span></span></span></span></span></span></font>权重矩阵(Transformer使用8个头部，因此我们最终会得到8个计算结果)，每个权重都是随机初始化的。经过训练每个<font color="purple"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>Q</mi></msup></mrow><annotation encoding="application/x-tex">W^Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">Q</span></span></span></span></span></span></span></span></span></span></span></font>、<font color="orange"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>K</mi></msup></mrow><annotation encoding="application/x-tex">W^K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07153em;">K</span></span></span></span></span></span></span></span></span></span></span></font>、<font color="lightblue"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>V</mi></msup></mrow><annotation encoding="application/x-tex">W^V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">V</span></span></span></span></span></span></span></span></span></span></span></font>都能将输入的矩阵投影到不同的表示子空间。</p>
+</li>
+</ol>
+<p><img src="/img/translate/transformer/18-16.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>在多头注意力中, 我们给每个头单独的权重矩阵, 从而产生不同的Q、 K 、V 矩阵。</p>
+<p>Transformer中的一个多头注意力（有8个head）的计算，就相当于用自注意力做8次不同的计算，并得到8个不同的结果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Z</mi></mrow><annotation encoding="application/x-tex">Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span></span></span></span>。</p>
+<p><img src="/img/translate/transformer/18-17.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>但是这会存在一点问题，多头注意力出来的结果会进入一个前馈神经网络，这个前馈神经网络可不能一下接收8个注意力矩阵，它的输入需要是单个矩阵（矩阵中每个行向量对应一个单词），所以我们需要一种方法把这8个合并成一个矩阵。</p>
+<p>怎么做呢？我们将这些矩阵连接起来，然后将乘以一个附加的权重矩阵<font color="pink"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>W</mi><mi>O</mi></msup></mrow><annotation encoding="application/x-tex">W^O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">O</span></span></span></span></span></span></span></span></span></span></span></font>。</p>
+<p><img src="/img/translate/transformer/18-18.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>以上就是多头自注意力的全部内容。让我们把多头注意力上述内容 放到一张图里看一下子：</p>
+<p><img src="/img/translate/transformer/18-19.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>现在我们已经看过什么是多头注意力了，让我们回顾一下之前的一个例子，再看一下编码“it”的时候每个头的关注点都在哪里：</p>
+<p><img src="/img/translate/transformer/18-20.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">编码it，用两个head的时候：其中一个更关注the animal，另一个更关注tired。
+此时该模型对it的编码。除了it本身的表达之外，同时也包含了the animal和tired的相关信息</font></center>
+<p>如果我们把所有的头的注意力都可视化一下，就是下图这样，但是看起来事情好像突然又复杂了。</p>
+<p><img src="/img/translate/transformer/18-21.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="使用位置编码表示序列的位置"><a class="markdownIt-Anchor" href="#使用位置编码表示序列的位置"></a> 使用位置编码表示序列的位置</h3>
+<p><strong>强烈安利一个详细解释位置编码的文章</strong>：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36667170/article/details/124336971">Transformer的位置编码详解</a></p>
+<p>到现在我们还没提到过如何表示输入序列中词汇的位置。</p>
+<p>Transformer在每个输入的嵌入向量中添加了位置向量。这些位置向量遵循某些特定的模式，这有助于模型确定每个单词的位置或不同单词之间的距离。将这些值添加到嵌入矩阵中，一旦它们被投射到Q、K、V中，就可以在计算点积注意力时提供有意义的距离信息。</p>
+<p><img src="/img/translate/transformer/18-22.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">为了让模型能知道单词的顺序，我们添加了位置编码，位置编码是遵循某些特定模式的。</font></center>
+<p>位置编码向量和嵌入向量的维度是一样的，比如下边都是四个格子：</p>
+<p><img src="/img/translate/transformer/18-23.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">举个例子，当嵌入向量的长度为4的时候，位置编码长度也是4</font></center>
+<p>一直说位置向量遵循某个模式，这个模式到底是什么。</p>
+<p>在下面的图中，每一行对应一个位置编码。所以第一行就是我们输入序列中第一个单词的位置编码，之后我们要把它加到词嵌入向量上。</p>
+<p>看个可视化的图：</p>
+<p><img src="/img/translate/transformer/18-24.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">这里表示的是一个句子有20个词，词嵌入向量的长度为512。
+可以看到图像从中间一分为二，因为左半部分是由正弦函数生成的。右半部分由余弦函数生成。
+然后将它们二者拼接起来，形成了每个位置的位置编码。</font></center>
+<p>你可以在<a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensor2tensor/blob/23bd23b9830059fbc349381b70d9429b5c40a139/tensor2tensor/layers/common_attention.py">get_timing_signal_1d()</a>中看到生成位置编码的代码。<br>
+这不是位置编码的唯一方法。但是使用正余弦编码有诸多好处，具体可以看这里：<a target="_blank" rel="noopener" href="https://lolitasian.blog.csdn.net/article/details/124336971">Transforme 结构：位置编码详解</a></p>
+<p>但是需要注意注意一点，上图的可视化是官方Tensor2Tensor库中的实现方法，将sin和cos拼接起来。但是和论文原文写的不一样，论文原文的3.5节写了位置编码的公式，论文不是将两个函数concat起来，而是将sin和cos交替使用。论文中公式的写法可以看这个代码：<a target="_blank" rel="noopener" href="https://github.com/jalammar/jalammar.github.io/blob/master/notebookes/transformer/transformer_positional_encoding_graph.ipynb">transformer_positional_encoding_graph</a>，其可视化结果如下：</p>
+<p><img src="/img/translate/transformer/18-25.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">这里表示的是一个句子有10个词，词嵌入向量的长度为64。</font></center>
+<h3 id="残差"><a class="markdownIt-Anchor" href="#残差"></a> 残差</h3>
+<p>在继续往下讲之前，我们还需再提一下编码器中的一个细节：每个编码器中的每个子层（自注意力层、前馈神经网络）都有一个残差连接，之后是做了一个层归一化（layer-normalization）。</p>
+<p><img src="/img/translate/transformer/18-26.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>将过程中的向量相加和层归一化可视化如下所示：</p>
+<p><img src="/img/translate/transformer/18-27.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>当然在解码器子层中也是这样的。</p>
+<p>我们现在画一个有两个编码器和解码器的Transformer，那就是下图这样的：</p>
+<p><img src="/img/translate/transformer/18-28.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="解码器"><a class="markdownIt-Anchor" href="#解码器"></a> 解码器</h2>
+<p>现在我们已经介绍了编码器的大部分概念，（因为编码器的解码器组件差不多）我们基本上也知道了解码器的组件是如何工作的。那让我们直接看看二者是如何协同工作的。</p>
+<p>编码器首先处理输入序列，将最后一个编码器组件的输出转换为一组注意向量K和V。每个解码器组件将在“encoder-decoder attention”层中使用编码器传过来的K和V，这有助于解码器将注意力集中在输入序列中的适当位置：<br>
+<img src="/img/translate/transformer/18-29.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<center><font color="gray" size="2">完成编码阶段后，我们开始进行解码阶段。<br>
+在解码阶段每一轮计算都只往外蹦一个输出，在本例中是输出一个翻译之后的英语单词。</font></center>
+<blockquote>
+<p>解码器不是咔咔咔一个句子一下给你输出出来，是每次只输出一个词！！！</p>
+</blockquote>
+<p>输出步骤会一直重复，直到遇到句子结束符表明transformer的解码器已完成输出。</p>
+<p>每一步的输出都会在下一个时间步喂给底部解码器，解码器会像编码器一样运算并输出结果（每次往外蹦一个词）。</p>
+<p>跟编码器一样，在解码器中我们也为其添加位置编码，以指示每个单词的位置。</p>
+<p><img src="/img/translate/transformer/18-30.gif" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>解码器中的自注意力层和编码器中的不太一样：</p>
+<p>在解码器中，自注意力层只允许关注已输出位置的信息。实现方法是在自注意力层的softmax之前进行mask，将未输出位置的信息设为极小值。</p>
+<p>“encoder-decoder attention”层的工作原理和前边的多头自注意力差不多，但是Q、K、V的来源不用，Q是从下层创建的（比如解码器的输入和下层解码器组件的输出），但是其K和V是来自编码器最后一个组件的输出结果。</p>
+<blockquote>
+<p>编码器是对整个输入序列进行编码嘛，然后将其结果转化成K和V传给解码器，这个K、V包含整个句子的所有信息。但是解码器的输入是什么？是拼接之前解码器的输出的单词。所以解码器造出来的Q仅包含已经输出的内容。</p>
+</blockquote>
+<h2 id="最后的线性层和softmax层"><a class="markdownIt-Anchor" href="#最后的线性层和softmax层"></a> 最后的线性层和softmax层</h2>
+<p>Decoder输出的是一个浮点型向量，如何把它变成一个词？</p>
+<p>这就是最后一个线性层和softmax要做的事情。</p>
+<p>线性层就是一个简单的全连接神经网络，它将解码器生成的向量映射到logits向量中。<br>
+假设我们的模型词汇表是10000个英语单词，它们是从训练数据集中学习的。那logits向量维数也是10000，每一维对应一个单词的分数。</p>
+<p>然后，softmax层将这些分数转化为概率（全部为正值，加起来等于1.0），选择其中概率最大的位置的词汇作为当前时间步的输出。</p>
+<p><img src="/img/translate/transformer/18-31.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">这张图从下往上看，假设具体上的那个向量是解码器的输出，然后将其转换为最终输出的单词。</font></center>
+<h2 id="训练过程概述"><a class="markdownIt-Anchor" href="#训练过程概述"></a> 训练过程概述</h2>
+<p>现在我们已经了解了Transformer的整个前向传播的过程，那我们继续看一下训练过程。<br>
+在训练期间，未经训练的模型会进行相同的前向传播过程。由于我们是在有标记的训练数据集上训练它，所以我们可以将其输出与实际的输出进行比较。</p>
+<p>为了便于理解，我们假设预处理阶段得到的词汇表只包含六个单词（“a”, “am”, “i”, “thanks”, “student”, <strong>“&lt;eos&gt;”</strong>）。</p>
+<p><img src="/img/translate/transformer/18-32.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">注意这个词汇表是在预处理阶段就创建的，在训练之前就已经得到了。</font></center>
+<p>一旦我们定义好了词汇表，我们就可以使用长度相同的向量（独热码，one-hot 向量）来表示词汇表中的每个单词。例如，我们可以用以下向量表示单词“am”：</p>
+<p><img src="/img/translate/transformer/18-33.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>接下来让我们讨论一下模型的损失函数，损失函数是我们在训练阶段优化模型的指标，通过损失函数，可以帮助我们获得一个准确的、我们想要的模型。</p>
+<h2 id="损失函数"><a class="markdownIt-Anchor" href="#损失函数"></a> 损失函数</h2>
+<p>假设我们正要训练我们的模型。</p>
+<p>假设现在是训练阶段的第一步，我们用一个简单的例子（一个句子就一个词）来训练模型：把<code>“merci”</code> 翻译成 <code>“thanks”</code>。<br>
+这意味着，我们希望输出是表示“谢谢”的概率分布。但由于这个模型还没有经过训练，所以目前还不太可能实现。</p>
+<p><img src="/img/translate/transformer/18-34.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">由于模型的参数都是随机初始化的，未经训练的模型为每个单词生成任意的概率分布。
+我们可以将其与实际输出进行比较，然后使用反向传播调整模型的权重，使输出更接近我们所需要的值。</font></center>
+<p>如何比较两种概率分布？在这个例子中我们只是将二者相减。实际应用中的损失函数请查看<a target="_blank" rel="noopener" href="https://colah.github.io/posts/2015-09-Visual-Information/">交叉熵损失</a>和<a target="_blank" rel="noopener" href="https://www.countbayesie.com/blog/2017/5/9/kullback-leibler-divergence-explained">Kullback–Leibler散度</a>。</p>
+<p>上述只是最最简单的一个例子。现在我们来使用一个短句子（一个词的句子升级到三三个词的句子了），比如输入 <code>“je suis étudiant”</code>预期的翻译结果为： <code>“i am a student”</code>。</p>
+<p>所以我们希望模型不是一次输出一个词的概率分布了，能不能连续输出概率分布，最好满足下边要求：</p>
+<ul>
+<li>每个概率分布向量长度都和词汇表长度一样。我们的例子中词汇表长度是6，实际操作中一般是30000或50000。</li>
+<li>在我们的例子中第一个概率分布应该在与单词“i”相关的位置上具有最高的概率</li>
+<li>第二种概率分布在与单词“am”相关的单元处具有最高的概率</li>
+<li>以此类推，直到最后输出分布指示“&lt;eos&gt;”符号。除了单词本身之外，单词表中也应该包含诸如“&lt;eos&gt;”的信息，这样softmax之后指向“&lt;eos&gt;”位置，标志解码器输出结束。</li>
+</ul>
+<p><img src="/img/translate/transformer/18-35.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">对应上面的单词表，我们可以看出这里的one-hot向量是我们训练之后想要达到的目标。</font></center>
+<p>在足够大的数据集上训练模型足够长的时间后，我们希望生成的概率分布如下所示：</p>
+<p><img src="/img/translate/transformer/18-36.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<center><font color="gray" size="2">这个是我们训练之后最终得到的结果。当然这个概率并不能表明某个词是否是训练集之中的词汇。
+在这里你可以看到softmax的一个特性，就是即使其他单词并不是本时间步的输出，
+也会有一丁点的概率存在，这一特性有助于帮助模型进行训练。</font></center>
+<p>模型一次产生一个输出，在这么多候选中我们如何获得我们想要的输出呢？现在有两种处理结果的方法：</p>
+<p>一种是贪心算法（greedy decoding）：模型每次都选择分布概率最高的位置，输出其对应的单词。</p>
+<p>另一种方法是束搜索（beam search）：保留概率最高前两个单词（例如，“I”和“a”），然后在下一步继续选择两个概率最高的值，以此类推，在这里我们把束搜索的宽度设置为2，当然你也可以设置其他的束搜索宽度。</p>
+<h2 id="更多内容"><a class="markdownIt-Anchor" href="#更多内容"></a> 更多内容</h2>
+<p>如果你想更深入了解Transformer：</p>
+<ul>
+<li>
+<p>阅读论文原文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>、 谷歌相关博客<a target="_blank" rel="noopener" href="https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html">Transformer: A Novel Neural Network Architecture for Language Understanding</a>和<a target="_blank" rel="noopener" href="https://ai.googleblog.com/2017/06/accelerating-deep-learning-research.html">Tensor2Tensor announcement</a>。</p>
+</li>
+<li>
+<p>观看<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rBCqOTEfxvg">Łukasz Kaiser</a>的授课视频。</p>
+</li>
+<li>
+<p>自己尝试一下代码：<a target="_blank" rel="noopener" href="https://colab.research.google.com/github/tensorflow/tensor2tensor/blob/master/tensor2tensor/notebooks/hello_t2t.ipynb">Jupyter Notebook provided as part of the Tensor2Tensor repo</a></p>
+</li>
+<li>
+<p>探究其源码<a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensor2tensor">GitHub - tensorflow/tensor2tensor: Library of deep learning models and datasets designed to make deep learning more accessible and accelerate ML research.</a></p>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+                    
+                      <a class="hover-with-bg" href="/tags/NLP/">NLP</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，文章禁止转载！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/29/21%20%E5%9B%BE%E8%A7%A3GPT-2/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">图解GPT-2 | The Illustrated GPT-2 (Visualizing Transformer Language Models)</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/17/15%202022%E5%B9%B4%E7%BA%AA%E5%BD%95%E7%89%87/">
+                        <span class="hidden-mobile">2022纪录片</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

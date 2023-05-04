@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#DDDFE2">
+  <meta name="author" content="Sian">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="作者博客：@Jay Alammar 原文链接：The Illustrated GPT-2 (Visualizing Transformer Language Models) – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)   今年，我们看到了机器学习令人眼花缭乱的一些应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图解GPT-2 | The Illustrated GPT-2 (Visualizing Transformer Language Models)">
+<meta property="og:url" content="http://yoursite.com/2022/06/29/21%20%E5%9B%BE%E8%A7%A3GPT-2/index.html">
+<meta property="og:site_name" content="Sian&#39;s Blog">
+<meta property="og:description" content="作者博客：@Jay Alammar 原文链接：The Illustrated GPT-2 (Visualizing Transformer Language Models) – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)   今年，我们看到了机器学习令人眼花缭乱的一些应">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f25111349b9414eaf39b08f92d6e50d~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/124aa00b9e3b4bf8acb80c431d7c33d3~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5d97cc06ec1143818f6287513131adf6~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2d40cdde8eb646399ebf1ca37843a831~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/22157ba6b20a4192817ab36d82512e26~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/57ddbf42e78d4d7594f89224ba7c87c1~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2fff83e085324fd8814a9183e4b39739~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e4166c8867554dec8219878228303626~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2152c2c8574479bb21f24f79114a85b~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/016a35b98e404a748c944d0dd74a62e3~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eaa9eaa23754324b5dc2e93485a826b~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/19bfcfe00a9a481f933bc8f5c503b6d9~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/42b49d713ba04689a60fce8fc7b01c58~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0db9b8b1d6f646c6a6ae28994422a4e1~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2fe969e8ffac46b387c548eab7acf2be~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/045176da833c4875a02fb24061dfff8d~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f0f26e0f15274d4bb0ad03a33010dcff~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/22bacef446f947a98029d8770761b878~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/83767dfcafa545fe9ce5b4de2279c268~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab4cab2f60b84b82aa7056b76469e96c~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fa75cb4e7b134c2b92ecd9c59e12c320~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6a0ce7988b32485eb4b61132978a281f~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e4f551fb881c42b3907298e81c030276~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d5771748edf4e44885fd8eedc1b5e6c~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ddca30da5c66495db2c165084eb77652~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9403434bddfe4c5db2e84b57e92f5681~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0526e57d12ce456eb5e131150fec50c6~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/60671198f19544e791cd5c5b8ebcf3f6~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2d76dc65e29a458b80a2461604e364cd~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/51a2f7ec40264833b9f46061c5c7a533~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f51145aedda94e5bbd0d69d2e0fc0869~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ea28482beab54d2b8b06dd53ad404e78~tplv-k3u1fbpfcp-watermark.image?">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/22451d0663fe474e92d54d26f38ec818.png#pic_center">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2f7313229de7472cb3e3e11dd28bc9f9~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/421b4e6322804b879cdccffcd10daeef~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/828633e79e6f43919264718a8f44796e~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d76c0af82fd545cf8498eb99c10208b0~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8067c2c64e6d46ed82ecb730c02a3523~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ad413509fea44b059c17a0762021bf9e~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="article:published_time" content="2022-06-29T03:26:00.000Z">
+<meta property="article:modified_time" content="2023-05-04T14:52:48.410Z">
+<meta property="article:author" content="Sian">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f25111349b9414eaf39b08f92d6e50d~tplv-k3u1fbpfcp-zoom-1.image">
+  
+  
+  <title>图解GPT-2 | The Illustrated GPT-2 (Visualizing Transformer Language Models) - Sian&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Sian&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="图解GPT-2 | The Illustrated GPT-2 (Visualizing Transformer Language Models)">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-06-29 11:26" pubdate>
+        2022年6月29日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      70 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图解GPT-2 | The Illustrated GPT-2 (Visualizing Transformer Language Models)</h1>
+            
+            <div class="markdown-body">
+              <p>作者博客：<a target="_blank" rel="noopener" href="http://jalammar.github.io/">@Jay Alammar</a></p>
+<p>原文链接：<a target="_blank" rel="noopener" href="http://jalammar.github.io/illustrated-gpt2/">The Illustrated GPT-2 (Visualizing Transformer Language Models) – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)</a></p>
+<hr>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f25111349b9414eaf39b08f92d6e50d~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>今年，我们看到了机器学习令人眼花缭乱的一些应用。OpenAI的GPT-2展现出了惊人的写作能力，其生成内容的连贯且富有感情，超出了我们对目前语言模型的预期。GPT-2其实并不是一种新型架构，他的结构类似于只有解码器的Transformer。GPT-2是一个基于Transformer的巨大的语言模型，并在庞大的数据集上进行了训练。在这篇文章中，我们将看一下是什么构造能让它具有如此性能；我们将深入解析它的自注意力层；最后我们会看一下语言模型之外的仅有解码器的Transformer的应用。</p>
+<p>这篇文章也是想补充我之前的博客《图解Transformer》，在这我会用更多的图片来解释Transformer的内部原理，以及它们是如何从原始的Transformer演变过来的。随着Transformer衍生出来的新模型的内部构造不断发展，我希望这系列的图解文章能帮助大家更容易理解这些模型。</p>
+<h2 id="1-gpt-2和语言模型"><a class="markdownIt-Anchor" href="#1-gpt-2和语言模型"></a> 1 GPT-2和语言模型</h2>
+<p>什么是语言模型？</p>
+<h3 id="11-语言模型"><a class="markdownIt-Anchor" href="#11-语言模型"></a> 1.1 语言模型</h3>
+<p>在之前的图解Word2Vec中我们看了什么是语言模型，其实就是一个能根据一部分句子内容预测下一个单词的机器学习模型。最常见的的语言模型大概就是手机输入法，它能根据你当前输入的内容提示下一个字或者词。</p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/124aa00b9e3b4bf8acb80c431d7c33d3~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>从这个角度说，我们可以称GPT-2是一个类似于输入法的预测下一个单词的模型，但是它比输入法更大更智能。GPT-2是在一个叫WebText的40GB的巨大数据集上训练的，这个数据集是OpenAI的工作者从网上收集的。从存储空间来看，我们的输入法只需要几十MB的空间，但是GPT-2最小的模型就需要500MB来存储它的参数，而最大的GPT-2模型是它的13倍，需要6.5GB的存储空间来存储其参数。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5d97cc06ec1143818f6287513131adf6~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>你可以通过<a target="_blank" rel="noopener" href="https://demo.allennlp.org/next-token-lm">AllenAI GPT-2 Explorer</a>体验一下GPT-2，它是使用GPT-2预测下一个词，会显示十种可能预测（以及它们的概率分数），你可以选择一个词，然后看它下一个预测列表。</p>
+<h3 id="12-transformer的语言模型"><a class="markdownIt-Anchor" href="#12-transformer的语言模型"></a> 1.2 Transformer的语言模型</h3>
+<blockquote>
+<p>声明：关于一些用词。</p>
+<p>英文：Transformer ＝encoder ＋decoder</p>
+<p>中文：Transformer＝编码器＋解码器 | Transformer ＝encoder模块＋decoder模块</p>
+<p>encoder has 6 encoder block</p>
+<p>encoder模块有6个encoder组件</p>
+</blockquote>
+<p>在我们之前图解Transformer中已经看到，一个Transformer是一个encoder-decoder构架组成的，编码器和解码器都是由数个Transformer组件堆叠成的。这个结构是很合理的，因为编码器-解码器构架成功解决了机器翻译中的问题。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2d40cdde8eb646399ebf1ca37843a831~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>在随后的大量研究工作中，该体系结构抛弃了编码器或着解码器，只使用另一部分Transformer组件。将尽可能多的组件堆叠起来，投入大量计算机资源，用大量文本进行训练（比如一些语言模型需要小几十万美元，AlphaStar可能需要数百万美元）。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/22157ba6b20a4192817ab36d82512e26~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>我们能把这些Transformer组件堆多高？GPT-2不同模型大小的区别就在于组件数目的不同：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/57ddbf42e78d4d7594f89224ba7c87c1~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="13-和bert的不同"><a class="markdownIt-Anchor" href="#13-和bert的不同"></a> 1.3 和BERT的不同</h3>
+<p>GPT-2是用Transformer的decoder组件，BERT是用Transformer的encoder组件。我们将在后边的章节继续探讨二者的差异。<br>
+但是两个模型一个关键的区别在于，GPT-2和传统的语言模型一样，一次只输出一个token。例如我们让一个训练好的GPT-2输出机器人第一定律。</p>
+<blockquote>
+<p>First Law of Robotics</p>
+<p>A robot may not injure a human being or, through inaction, allow a human being to come to harm.</p>
+</blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2fff83e085324fd8814a9183e4b39739~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>这些模型实际工作的方式：在生成每个token之后，这个token会被添加到输入序列中组成新序列，新序列作为模型下一步的输入。这方式被称为“自动回归”（auto-regression）。这就是RNNs模型的一个机制。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e4166c8867554dec8219878228303626~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>GPT2以及TransformerXL和XLNet等后来的模型本质上看都是自回归模型。当然BERT不是。这是有代价的，不使用自动回归，但是BERT获得了整合上下文的能力，从而获得了更好的结果。XLNet又回到了自回归，但是同时找到了另一种方法来整合双方的上下文。</p>
+<h3 id="14-transformer-组件的演变"><a class="markdownIt-Anchor" href="#14-transformer-组件的演变"></a> 1.4 Transformer 组件的演变</h3>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Transformer论文</a>原文介绍了两种类型的transformer组件：</p>
+<h4 id="141-encoder组件"><a class="markdownIt-Anchor" href="#141-encoder组件"></a> 1.4.1 encoder组件</h4>
+<p>首先是编码器组件：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2152c2c8574479bb21f24f79114a85b~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<center><font color="gray" size="2">原文中的编码器块可以接收最大长度为512的序列作为输入。<br>如果一个输入序列达不到512也没关系，我们可以把序列的其余部分填充起来。</font></center>
+<h4 id="142-decoder组件"><a class="markdownIt-Anchor" href="#142-decoder组件"></a> 1.4.2 decoder组件</h4>
+<p>然后是decoder组件，decoder组件和encoder组件稍微有点不一样，区别是它中间加了一层可以让它关注到encoder的内容。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/016a35b98e404a748c944d0dd74a62e3~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>当然这里的自注意力层也有一个关键区别，就是他会把之后的内容mask掉。<br>
+不是和BERT那样把词替换为[mask]，而是在自注意力计算过程中通过一些方法不让自注意力计算当前位置右侧的内容。</p>
+<p>例如，如果我们现在计算第四个单词，他的注意力只能关注到前四个词。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eaa9eaa23754324b5dc2e93485a826b~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>再重复一遍，BERT的自注意力和GPT-2的屏蔽式自注意力之间是有明显的区别的。一个正常的自注意计算在计算某位置的时候允许模型关注其右边的信息，屏蔽式自注意则不能关注到右侧信息：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/19bfcfe00a9a481f933bc8f5c503b6d9~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="143-只有decoder组件的decoder模块"><a class="markdownIt-Anchor" href="#143-只有decoder组件的decoder模块"></a> 1.4.3 只有decoder组件的decoder模块</h4>
+<p>在Transformer论文之后，<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1801.10198.pdf">Generating Wikipedia by Summarizing Long Sequences</a> 提出了transformer组件的另一种打开方式，也能够进行语言建模。这个模型丢掉了Transformer的编码器，因此我们称之为“Transformer-解码器”。这个早期的基于transformer的语言模型由六个transformer的decoder组件组成：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/42b49d713ba04689a60fce8fc7b01c58~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<center><font color="gray" size="2">decoder组件都是相同的。我展开了第一个，所以你可以看到它的自注意力层是带mask的自注意。注意，该模型现在可以接受的输入序列长度为4000，这是对比原始transformer输入长度512的一个大规模升级。</font></center>
+<p>这些decoder组件和原始的transformer的decoder组件非常相似，但是他们去掉了第二个自注意力层。<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1808.04444.pdf"> Character-Level Language Modeling with Deeper Self-Attention</a>这篇文章也研究了一个类似结构，创建一个语言模型每次预测一个字或词。</p>
+<p>OpenAI的GPT-2就是这种仅使用解码器组件的模型。</p>
+<h3 id="15-gpt-2内部构造"><a class="markdownIt-Anchor" href="#15-gpt-2内部构造"></a> 1.5 GPT-2内部构造</h3>
+<blockquote>
+<p><strong>Look inside and you will see, The words are cutting deep inside my brain. Thunder burning, quickly burning, Knife of words is driving me insane, insane yeah.  ——Budgie</strong></p>
+</blockquote>
+<blockquote>
+<p>上边这句话，据我观察就是作者引用别人一句话，皮了一下。</p>
+</blockquote>
+<p>让我们把一个训练好的GPT-2丢到手术台上，拆解看一下它是如何运作的。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0db9b8b1d6f646c6a6ae28994422a4e1~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>GPT-2可以处理1024长度的tokens，每个token沿着自己的路径流经所有decoder组件。<br>
+运行一个已经训练好的的GPT-2，最简单的方法是让它自己运行，或者称之为无条件生样本。我们也可以给它一个提示（prompt），让它围绕一个特定的主题生成，或称之为交互式条件样本生成。<br>
+在无限制的情况下，我们只需要给他一个开始标记，就可以让他开始生成词语（训练好的模型使用<code>&lt;|endoftext|</code>&gt;作为开始标记，之后我们用<code>&lt;s&gt;</code>来代替）。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2fe969e8ffac46b387c548eab7acf2be~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>该模型只有一个输入标记，所以该路径将是唯一的活动路径。这个token在所有层中被连续处理，然后会产生一个向量。这个向量可以根据模型的词汇表进行评分，词汇表就是模型知道的所有单词，GPT-2的词汇表是5万词。在这个例子中，我们选择了概率最高的token：“the”。</p>
+<p>我们也可以从中调节：你想一下，如果你在输入法里不断点击提示单词，它有时会陷入重复，就是一直都显示同样的文字，唯一的解决办法是你点击第二个或第三个建议的单词。同样的情况也会发生在GPT-2里。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/045176da833c4875a02fb24061dfff8d~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>GPT-2有一个叫做top-k的参数，我们可以借助它，让模型采样除了最高概率单词以外的单词（top-k=1时就是上边说的情况）。</p>
+<blockquote>
+<p>Top—k就是进行束搜索，设置束搜索的宽度k，当k＝1的时候又退化成贪心算法，每次采样概率最高的那个单词。</p>
+</blockquote>
+<p>在下一步，我们将第一步的输出添加到我们的输入序列中，并让模型进行下一次预测。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f0f26e0f15274d4bb0ad03a33010dcff~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>注意，现在第二条路径是计算中唯一活动的路径。GPT-2的每一层都保留了自己对第一个token的解释，并在处理第二个token时使用自己存储的解释（我们将在后边自注意部分对此进行详细介绍）。GPT-2不会根据第二个token内容对第一个token重新编码。</p>
+<h3 id="16-更深入了解内部构造"><a class="markdownIt-Anchor" href="#16-更深入了解内部构造"></a> 1.6 更深入了解内部构造</h3>
+<h4 id="161-输入编码"><a class="markdownIt-Anchor" href="#161-输入编码"></a> 1.6.1 输入编码</h4>
+<p>看一下更多的细节加深对模型的理解。先从输入开始看。跟我们之前说到的其他模型一样，模型会先从embedding矩阵中查找输入单词的embedding向量，embedding矩阵可以看做是预训练模型的一部分。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/22bacef446f947a98029d8770761b878~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>每一行都是一个单词的embedding向量：用一组数字表示一个词语，这组数字是捕获词语的一些含义信息。向量长度在不同大小的GPT-2中是不一样的。最小的GPT-2模型（GPT-2 small）中每个token的embedding向量长度为每768。</p>
+<p>因此最开始我们需要到embedding矩阵中找到开始token <code>&lt;s&gt;</code> 。在把它丢给模型第一个块之前，我们需要给它加上位置编码，位置编码作用是给transformer组件指示该单词在输入序列中的位置。</p>
+<p>位置编码矩阵也是GPT-2模型的一部分，它包含输入中1024个位置的每个位置编码向量。</p>
+<blockquote>
+<p>GPT—2可接受的最大的输入长度为1024，。Transformer接受的输入序列的最大长度是512．</p>
+</blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/83767dfcafa545fe9ce5b4de2279c268~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>至此，我们已经介绍了在将输入词交给第一个transformer组件之前如何处理这个单词。我们还知道训练好的GPT-2中的两个权重矩阵。</p>
+<blockquote>
+<p>意思就是一个训练好的GPT—2模型是有embedding矩阵和位置编码矩阵的。之后用这个训练好的模型的时候直接从里边找到对应单词的表示加吧起来用就行了。</p>
+</blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab4cab2f60b84b82aa7056b76469e96c~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<center><font color="gray" size="2">把一个单词丢进transformer组件之前要做的事：先找到该单词的embedding，再把它和对应的位置编码相结合。</font></center>
+<blockquote>
+<p>就是输入序列进入第一个transformer之前要经过两部分将其转化为对应的单词表示向量：单词的词嵌入向量＋单词位置编码</p>
+</blockquote>
+<h4 id="162-堆栈之旅"><a class="markdownIt-Anchor" href="#162-堆栈之旅"></a> 1.6.2 堆栈之旅</h4>
+<blockquote>
+<p>说完了输入序列怎么进入第一个transformer块，接下来就要说这些排排坐的transformer的decoder块怎么接连处理输入序列了。</p>
+</blockquote>
+<p>先看最底下第一个decoder组件，要处理的token先经过自注意力层的处理，再经过神经网络层的处理，处理完之后把它结果丢给下一个decoder组件。每个组件的处理流程都是一样的，但是每个组件的自注意力层和神经网络层都有自己的权重。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fa75cb4e7b134c2b92ecd9c59e12c320~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="163-回顾自注意力"><a class="markdownIt-Anchor" href="#163-回顾自注意力"></a> 1.6.3 回顾自注意力</h4>
+<p>语言很大程度上依赖于语境。例如，看看机器人第二定律：</p>
+<blockquote>
+<p><strong>Second Law of Robotics</strong></p>
+<p>A robot must obey the orders given <strong>it</strong> by human beings except where <strong>such orders</strong> would conflict with the <strong>First Law</strong>.*</p>
+</blockquote>
+<p>我在句子中标出了三个地方，这些地方的单词是指代其他单词的。如果不结合它们所指的上下文，就没有办法理解或处理这些单词。当一个模型处理这个句子时，它必须能够知道：</p>
+<ul>
+<li><strong>it</strong> 指的是 robot</li>
+<li><strong>such orders</strong>前半部分的 the orders given it by human beings</li>
+<li><strong>First Law</strong> 指的是机器人第一定律</li>
+</ul>
+<p>这就是自注意力要做的。在处理某个单词之前，它会先让模型理解相关单词，这些相关单词可以解释某个单词的上下文。注意力要做的就是给每个词进行相关度打分，并将它们的向量表示相加来。</p>
+<p>举个栗子，处理“it”的时候，注意力机制会关注到“a robot”，注意力会计算三个词“it”、“a”、“robot”的向量及其attention分数的加权和。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6a0ce7988b32485eb4b61132978a281f~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e4f551fb881c42b3907298e81c030276~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h4 id="164-自注意力处理过程"><a class="markdownIt-Anchor" href="#164-自注意力处理过程"></a> 1.6.4 自注意力处理过程</h4>
+<p>自注意力处理过程是沿着序列的每个token的路径处理的， 主要组成部分是下边三个向量：</p>
+<ul>
+<li><strong>Query:</strong> query是当前单词的表示形式，用于对所有其他单词（key）进行评分，我们只需要关注当前正在处理的token的query。</li>
+<li><strong>Key:</strong> Key可以看做是序列中所有单词的标签，是在我们找相关单词时候的对照物。</li>
+<li><strong>Value:</strong> Value是单词的实际表示，一旦我们对每个单词的相关度打分之后，我们就要对value进行相加表示当前正在处理的单词的value。</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d5771748edf4e44885fd8eedc1b5e6c~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>一个简单的比喻是，就像在文件柜里找文件一样。query就像一张你拿着一张便签，上面写着要找的主题。key就像柜子里文件夹的标签，当你找到与便利贴上相关的标签的时候，我们取出该文件夹，文件夹中的内容就是value向量。当然你要找的不是一个文件，是一组相关文件。</p>
+<p>将query向量乘以key向量生成文件夹的相关度分数（实现上就是两个向量点积之后softmax）</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ddca30da5c66495db2c165084eb77652~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>我们把每一个key乘以一组value，然后相加，这就产生了我们自注意力的结果。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9403434bddfe4c5db2e84b57e92f5681~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>向量加权换和计算在上图的例子中就是将50%注意力放在“robot”这个词上，将30%注意力放在“a”这个词上，将19%的注意力放在“it”这个词上。 如果你想详细了解，第二部分我们会更深入探讨自注意力机制，在这我们就简略说一下这一部分，继续往下看模型输出是怎样的。</p>
+<h4 id="165-模型输出"><a class="markdownIt-Anchor" href="#165-模型输出"></a> 1.6.5 模型输出</h4>
+<p>当模型最后一个decoder组件产生输出向量的时候，会把这个向量和embedding矩阵做乘法。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0526e57d12ce456eb5e131150fec50c6~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>回想一下，embedding矩阵中的每一行对应词汇表中的一个单词。因此这个乘法的计算结果我们可以认为是当前单词结果对整个词汇表的打分。</p>
+<blockquote>
+<p>类比—下attention计算，query和key点乘结果是注意力分数，在这里输出和embedding矩阵相乘可以认为是输出对embedding矩阵打分。</p>
+</blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/60671198f19544e791cd5c5b8ebcf3f6~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>我们可以从中选出分数最高的那个词（top_k=1）。但是模型考虑其他词汇可能会取得更好的结果。因此一个更好的策略是使用这个分数进行随机采样，从中抽一个词出来，这样分数高的词汇被选中的概率也高。还有一种更一般的方法是将tok_k设置为40，从中选取40个得分最高的词汇。</p>
+<blockquote>
+<p>但是模型考虑其他词汇可能会取得更好的结果：这个不理解回去看束搜索和贪心策略的对比。</p>
+<p>更好的策略是使用这个分数进行随机采样：我个人理解是，采用加权采样的方法，得分高的更容易被抽到，但是还是有随机性的，因此可以认为是从tok＿k中抽一个词，这种方法保证性能的同时减小计算开销。想一下，使用贪心策略不一定能得到最好的结果，使用束搜索设置为40又要消耗一定的空间和计算资源。因此加权随机采样确实是可以看做更好的方法。</p>
+</blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2d76dc65e29a458b80a2461604e364cd~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>这样，模型就完成了一次迭代，最终输出了一个单词。该模型继续迭代，直到生成整个上下文（GPT-2序列上限1024个token）或直到生成序列结束的token<code>&lt;e&gt;</code>。</p>
+<h3 id="17-gpt-2小结"><a class="markdownIt-Anchor" href="#17-gpt-2小结"></a> 1.7 GPT-2小结</h3>
+<p>现在我们知道了GPT-2是如何工作的了。如果你想继续了解自注意力层是如何运作的，接下来的额外部分就是为你准备的。我补充这部分内容是为了更详细地图解自注意力机制，以便引入更多基于Transformer的模型（比如TransformerXL、XLNet等）。</p>
+<p>另外要指出在这篇文章中一些过分简化的内容:</p>
+<ul>
+<li>
+<p>原文中没有明确区分“words”和“tokens” 的概念。但是实际上GPT-2 使用 Byte Pair Encoding创建单词表的tokens。这意味着GPT-2中token是word的一部分。</p>
+</li>
+<li>
+<p>本文用的示例都是GPT的推理、评估模式，这就是为什么一次只处理一个单词。在训练的时候GPT-2是可以对长文本序列进行并行处理的。同样在训练时候，不同于评估时候batch为1，GPT-2可以处理的batch大小为512。</p>
+</li>
+<li>
+<p>为了更好安排文章图像的空间，我对一些向量进行了转置。但在模型执行的时候必须更精确。</p>
+</li>
+<li>
+<p>Transformers 使用大量的层归一化（layer normalization）我们在<a target="_blank" rel="noopener" href="https://juejin.cn/post/7148332180526071821">【翻译】图解transformer - 掘金 (juejin.cn)</a>中提到过，但在这篇文章中我们主要是讲自注意力。</p>
+</li>
+<li>
+<p>有时候我需要用更多的块块表示一个向量，我是这样画的。</p>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/51a2f7ec40264833b9f46061c5c7a533~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<blockquote>
+<p>针对倒数第二条：并不是layer normalization不重要，这篇文章作者主要是想讲自注意力的应用，就将其他相对来说“细枝末节”的部分省略了。</p>
+<p>针对最后一条：作者画几个格子不重要，重要的是数字表示。</p>
+</blockquote>
+<h2 id="2-图解自注意力机制"><a class="markdownIt-Anchor" href="#2-图解自注意力机制"></a> 2 图解自注意力机制</h2>
+<p>因为文章篇幅较长，所以我把自注意力机制单独摘出去了。有需要的点击链接查看第二部分的《图解自注意力机制》</p>
+<p>图解GPT - 2: <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f51145aedda94e5bbd0d69d2e0fc0869~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>图解自注意力机制：</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ea28482beab54d2b8b06dd53ad404e78~tplv-k3u1fbpfcp-watermark.image?" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="3-beyond-language-modeling"><a class="markdownIt-Anchor" href="#3-beyond-language-modeling"></a> 3 Beyond Language Modeling</h2>
+<p>只有decoder的transformer不断显示出超越语言模型（LM）的前景。它在许多应用场景中都取得了很好的效果，也可以简单图解一下。接下来我们就介绍几个应用场景来结束我们这篇文章。</p>
+<h3 id="31-机器翻译-machine-translation"><a class="markdownIt-Anchor" href="#31-机器翻译-machine-translation"></a> 3.1 机器翻译 machine translation</h3>
+<p>翻译任务不需要编码器，只用解码器就可以进行翻译了。</p>
+<p><img src="https://img-blog.csdnimg.cn/22451d0663fe474e92d54d26f38ec818.png#pic_center" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="32-摘要-summarization"><a class="markdownIt-Anchor" href="#32-摘要-summarization"></a> 3.2 摘要 Summarization</h3>
+<p>这是只有编码器的transformer训练的第一个任务，训练它阅读维基百科的文章（不包括目录前边的开头部分），前边的开头部分作为训练数据的标签。</p>
+<blockquote>
+<p>看下图，维基百科构成是“摘要（紫色区域）—目录—正文（绿色区域）”，在这里就是用正文做训练文本，用摘要做标签。</p>
+</blockquote>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2f7313229de7472cb3e3e11dd28bc9f9~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>GPT-2就是使用wikipedia的文章进行训练的，因此训练好的模型可以直接拿来做摘要。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/421b4e6322804b879cdccffcd10daeef~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="33-迁移学习-transfer-learning"><a class="markdownIt-Anchor" href="#33-迁移学习-transfer-learning"></a> 3.3 迁移学习 Transfer Learning</h3>
+<p>在《<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.08836">Sample Efficient Text Summarization Using a Single Pre-Trained Transformer</a>》，只有解码器的transformer结构首先在语言模型上进行预训练，然后微调做摘要任务，结果证明，在有限的数据设置中，它比预先训练的编码器-解码器变压器取得更好的结果。</p>
+<p>GPT-2的论文原文也展示了在语言建模上对模型进行预训练后做摘要任务的结果。</p>
+<h3 id="34-音乐生成-music-generation"><a class="markdownIt-Anchor" href="#34-音乐生成-music-generation"></a> 3.4 音乐生成 Music Generation</h3>
+<p><a target="_blank" rel="noopener" href="https://magenta.tensorflow.org/music-transformer">音乐Transformer</a>使用的是只有解码器的Transformer结构来生成具有表现力的音乐。“音乐建模”就像语言建模一样，让模型以一种无监督的方式学习音乐，然后让它对输出进行采样(我们之前称之为“rambling”)。</p>
+<p>你可能会好奇音乐是如何表示的。语言建模可以通过字（characters）、词（words）或token作为某个单词（word）的表示，并将其转化为向量表示。在音乐演奏中(比如钢琴)，我们除了要表示音符，还要表示速度——衡量钢琴键按得有多用力。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/828633e79e6f43919264718a8f44796e~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>一个表演只是一组one-hot向量而已。一个mini文件可以转化为下图的格式。</p>
+<p>论文中输入序列的示例如下图：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d76c0af82fd545cf8498eb99c10208b0~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>这个输入序列的 one-hot 向量表示如下:</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8067c2c64e6d46ed82ecb730c02a3523~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>我很喜欢这篇论文中的音乐transformer的自注意力图像。在这里我添加了一些注释：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ad413509fea44b059c17a0762021bf9e~tplv-k3u1fbpfcp-zoom-1.image" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p>这个音乐中有明显的三角形循环。query在最后一个三角形的峰值上，它会注意到之前所有的三角形的高音峰值（包括乐曲最开始的峰值）。图中的线表示query都关注到了哪些位置，荧光绿色的条条代表的是attention分数，绿条条越长代表在这个位置投入的注意力越多。</p>
+<p>如果你不懂图中黑色条条块块的音符表示方法可以看一下这个视频：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ipzR9bhei_o">d小调托卡塔与赋格</a></p>
+<h2 id="4-总结"><a class="markdownIt-Anchor" href="#4-总结"></a> 4 总结</h2>
+<p>GPT-2到这里就介绍完了。本文对GPT-2以及它的父模型（只有解码器的Transformer结构）的探索。我希望你在读完这篇文章后，对自关注力机制有了更深入的理解，并且对Transformer的呢哦不工作机制有了更多的了解。</p>
+<h2 id="5-其他资源"><a class="markdownIt-Anchor" href="#5-其他资源"></a> 5 其他资源</h2>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://github.com/openai/gpt-2">OpenAI 实现的 GPT-2</a></p>
+</li>
+<li>
+<p>还可以看一下🤗的 <a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers">pytorch-transformers</a> ，这里还有一些其他基于Transformer的预训练模型的。</p>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+                    
+                      <a class="hover-with-bg" href="/tags/NLP/">NLP</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，文章禁止转载！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/07/17/20%20%E5%9B%BE%E8%A7%A3BERT/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">图解BERT、ELMo（NLP中的迁移学习）| The Illustrated BERT, ELMo, and co.</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/23/19%20%E5%9B%BE%E8%A7%A3Transformer/">
+                        <span class="hidden-mobile">图解transformer | The Illustrated Transformer</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
